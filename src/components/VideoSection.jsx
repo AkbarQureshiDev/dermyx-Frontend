@@ -166,7 +166,7 @@ const VideoSection = () => {
 
         <div className="flex justify-center mb-10 md:mb-14">
           <div className="inline-flex gap-2 items-center">
-            <h2 className="prata-regular text-gray-700 text-2xl sm:text-3xl md:text-4xl text-center">
+            <h2 className="prata-regular text-gray-700 text-lg sm:text-3xl md:text-4xl text-center">
               Trusted By Influencers &amp; <span className="text-gray-900 font-medium">Experts</span>
             </h2>
             <p className="w-8 sm:w-12 h-[1px] sm:h-[2px] bg-gray-700"></p>

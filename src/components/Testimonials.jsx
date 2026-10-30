@@ -181,7 +181,7 @@ const Testimonials = () => {
     >
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
 
-        <div className="text-center py-8 text-3xl">
+        <div className="text-center py-6 sm:py-8 text-xl sm:text-3xl">
           <Title text1={'What Our Clients'} text2={'Say About Us'} />
         </div>
         <p className="-mt-4 mb-10 text-center text-sm text-gray-500">

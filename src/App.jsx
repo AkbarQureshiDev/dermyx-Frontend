@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -34,6 +34,7 @@ const App = () => {
         
         {/* Other pages wrapped in standard padding */}
         <Route path='/collection' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><Collection /></div>} />
+        <Route path='/bundles' element={<Navigate to='/collection?tag=bundle' replace />} />
         <Route path='/about' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><About /></div>} />
         <Route path='/contact' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><Contact /></div>} />
         <Route path='/privacy-policy' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><PrivacyPolicy /></div>} />

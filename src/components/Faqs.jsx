@@ -46,7 +46,7 @@ const Faqs = () => {
   return (
     <div className='my-16'>
       <div className='text-center mb-8'>
-        <p className='prata-regular text-2xl sm:text-3xl text-gray-500'>Frequently Asked <span className='text-gray-700 font-medium'>Questions</span></p>
+        <p className='prata-regular text-xl sm:text-3xl text-gray-500'>Frequently Asked <span className='text-gray-700 font-medium'>Questions</span></p>
       </div>
       <div className='max-w-[1000px] mx-auto'>
         {faqs.map((faq, i) => (

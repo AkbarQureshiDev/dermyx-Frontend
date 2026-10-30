@@ -12,91 +12,50 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
       ? Math.round(((originalPrice - price) / originalPrice) * 100)
       : 0
 
-  // Show only the first image, no carousel
   return (
-    <div style={{
-      background: 'transparent',
-      border: '1px solid #B0D1E4',
-      borderRadius: '24px',
-      padding: '16px 16px 20px',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '12px',
-      transition: 'box-shadow 0.2s, transform 0.2s',
-      overflow: 'hidden',
-    }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(176,209,228,0.4)' }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+    <div
+      className="bg-transparent border border-[#B0D1E4] rounded-2xl sm:rounded-[24px] p-2.5 sm:p-4 pb-3 sm:pb-5 flex flex-col gap-2 sm:gap-3 transition-all duration-200 overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(176,209,228,0.4)] h-full"
     >
-      {/* Image with autoscroll */}
-      <Link to={`/product/${id}`} onClick={() => scrollTo(0, 0)} style={{
-        display: 'block',
-        position: 'relative',
-        borderRadius: '16px',
-        overflow: 'hidden',
-        background: '#f0f8fd',
-        aspectRatio: '1 / 1',
-        width: '100%',
-      }}>
+      {/* Product Image */}
+      <Link
+        to={`/product/${id}`}
+        onClick={() => scrollTo(0, 0)}
+        className="block relative rounded-xl sm:rounded-2xl overflow-hidden bg-[#f0f8fd] aspect-square w-full"
+      >
         {image && image.length > 0 && (
           <img
             src={image[0]}
             alt={name}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
+            className="absolute inset-0 w-full h-full object-cover"
           />
         )}
 
         {soldOut && (
-          <span style={{
-            position: 'absolute',
-            top: '10px',
-            left: '10px',
-            background: '#dc2626',
-            color: '#fff',
-            fontSize: '10px',
-            fontWeight: 700,
-            letterSpacing: '0.05em',
-            padding: '4px 10px',
-            borderRadius: '999px',
-            zIndex: 2,
-          }}>OUT OF STOCK</span>
+          <span className="absolute top-2 left-2 bg-[#dc2626] text-white text-[9px] sm:text-[10px] font-bold tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full z-10">
+            OUT OF STOCK
+          </span>
         )}
-
       </Link>
 
       {/* Product name */}
       <Link to={`/product/${id}`} onClick={() => scrollTo(0, 0)}>
-        <p style={{
-          fontSize: '14px',
-          fontWeight: 600,
-          color: '#1e293b',
-          lineHeight: 1.45,
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          cursor: 'pointer',
-        }}>{name}</p>
+        <p className="text-xs sm:text-sm font-semibold text-[#1e293b] leading-snug line-clamp-2 cursor-pointer min-h-[2rem] sm:min-h-[2.5rem]">
+          {name}
+        </p>
       </Link>
 
       {/* Price row */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '7px', flexWrap: 'wrap' }}>
+      <div className="flex items-baseline gap-1 sm:gap-2 flex-wrap">
         {originalPrice > 0 && originalPrice > price && (
-          <span style={{ color: '#94a3b8', fontSize: '13px', textDecoration: 'line-through', fontWeight: 500 }}>
+          <span className="text-[#94a3b8] text-[11px] sm:text-[13px] line-through font-medium">
             {currency}{originalPrice.toLocaleString()}
           </span>
         )}
-        <span style={{ color: '#B0D1E4', fontSize: '17px', fontWeight: 700 }}>
+        <span className="text-[#B0D1E4] text-sm sm:text-[17px] font-bold">
           {currency} {Number(price).toLocaleString()}
         </span>
         {discountPct > 0 && (
-          <span style={{ background: '#FDF2F8', color: '#FCB4C5', fontSize: '11px', fontWeight: 700, padding: '3px 9px', borderRadius: '20px' }}>
+          <span className="bg-[#FDF2F8] text-[#FCB4C5] text-[10px] sm:text-[11px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full">
             {discountPct}% off
           </span>
         )}
@@ -104,9 +63,9 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
 
       {/* Rating */}
       {Number(reviewCount) > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Stars rating={rating} size={13} />
-          <span style={{ fontSize: '12px', color: '#64748b' }}>
+        <div className="flex items-center gap-1 sm:gap-1.5">
+          <Stars rating={rating} size={12} />
+          <span className="text-[11px] sm:text-xs text-[#64748b]">
             {Number(rating).toFixed(1)} ({reviewCount})
           </span>
         </div>
@@ -114,34 +73,21 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
 
       {/* Add to cart button */}
       <button
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '8px',
-          background: soldOut ? '#e2e8f0' : '#B0D1E4',
-          color: soldOut ? '#94a3b8' : '#1e293b',
-          fontSize: '14px',
-          fontWeight: 600,
-          border: 'none',
-          borderRadius: '40px',
-          padding: '12px 0',
-          width: '100%',
-          cursor: soldOut ? 'not-allowed' : 'pointer',
-          marginTop: 'auto',
-          transition: 'background 0.2s, transform 0.15s',
-        }}
+        type="button"
         disabled={soldOut}
-        onMouseEnter={e => { if (!soldOut) e.currentTarget.style.background = '#93bdd4' }}
-        onMouseLeave={e => { e.currentTarget.style.background = soldOut ? '#e2e8f0' : '#B0D1E4' }}
         onClick={() => { if (!soldOut) addToCart(id) }}
+        className={`w-full py-2 sm:py-3 px-2 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 sm:gap-2 mt-auto transition-colors border-0 ${
+          soldOut
+            ? 'bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed'
+            : 'bg-[#B0D1E4] hover:bg-[#93bdd4] text-[#1e293b] cursor-pointer'
+        }`}
       >
-        <svg style={{ width: '17px', height: '17px', flexShrink: 0 }} viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
-          <path d='M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z' />
-          <line x1='3' y1='6' x2='21' y2='6' />
-          <path d='M16 10a4 4 0 01-8 0' />
+        <svg className="w-3.5 h-3.5 sm:w-[17px] sm:h-[17px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
         </svg>
-        {soldOut ? 'Out of stock' : 'Add to cart'}
+        <span>{soldOut ? 'Out of stock' : 'Add to cart'}</span>
       </button>
     </div>
   )

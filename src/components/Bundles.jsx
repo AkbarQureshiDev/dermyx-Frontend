@@ -64,7 +64,7 @@ const Bundles = () => {
 
     if (bundles.length === 0) return (
         <div className='my-10'>
-            <div className='text-center text-3xl py-8'>
+            <div className='text-center text-xl sm:text-3xl py-6 sm:py-8'>
                 <Title text1={'Save More'} text2={'With Bundles'} />
             </div>
         </div>
@@ -124,7 +124,7 @@ const Bundles = () => {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            <div className='text-center text-3xl py-8'>
+            <div className='text-center text-xl sm:text-3xl py-6 sm:py-8'>
                 <Title text1={'Save More'} text2={'With Bundles'} />
             </div>
 

@@ -27,7 +27,7 @@ const Footer = () => {
             <Link to='/collection'><li className='hover:text-gray-300 transition-colors'>All Products</li></Link>
             <Link to='/about'><li className='hover:text-gray-300 transition-colors'>About</li></Link>
             <Link to='/contact'><li className='hover:text-gray-300 transition-colors'>Contact</li></Link>
-            <Link to='/bundles'><li className='hover:text-gray-300 transition-colors'>Bundles</li></Link>
+            <Link to='/collection?tag=bundle'><li className='hover:text-gray-300 transition-colors'>Bundles</li></Link>
           </ul>
         </div>
 
