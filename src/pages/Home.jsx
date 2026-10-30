@@ -6,6 +6,7 @@ import FiercelyBanner from '../components/FiercelyBanner'
 import BestSeller from '../components/BestSeller'
 import Bundles from '../components/Bundles'
 import Testimonials from '../components/Testimonials'
+import Results from '../components/Results'
 import OurPolicy from '../components/OurPolicy'
 import VideoSection from '../components/VideoSection'
 import Faqs from '../components/Faqs'
@@ -53,13 +54,16 @@ const Home = () => {
       {/* 7. Testimonials - customer validation */}
       <Testimonials />
 
-      {/* 8. Policy - reassurance */}
+      {/* 7c. Results You Can Trust - customer proof */}
+      <Results />
+
+      {/* 8. Video Section - Trusted By Influencers & Experts */}
+      <VideoSection />
+
+      {/* 9. Policy - reassurance */}
       <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
         <OurPolicy />
       </div>
-
-      {/* 9. Video Section - Trusted By Influencers & Experts */}
-      <VideoSection />
 
       {/* 10. FAQs + Newsletter - retention */}
       <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>

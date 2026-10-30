@@ -44,8 +44,8 @@ const Contact = () => {
 
             <div className='my-10 flex flex-col md:flex-row gap-10 mb-20'>
 
-                {/* Left — Info */}
-                <div className='flex flex-col gap-6 md:w-1/2' style={{ maxWidth: '350px' }}>
+                {/* Left — Info (hidden on mobile screen, shows on md+ desktop screens) */}
+                <div className='hidden md:flex flex-col gap-6 md:w-1/2' style={{ maxWidth: '350px' }}>
                     <div className='rounded-2xl p-8 flex flex-col gap-6' style={{ backgroundColor: '#B0D1E4' }}>
 
                         <div className='flex items-start gap-3'>
@@ -101,7 +101,7 @@ const Contact = () => {
                 </div>
 
                 {/* Right — Form */}
-                <form onSubmit={onSubmit} className='flex flex-col gap-4 md:w-1/2'>
+                <form onSubmit={onSubmit} className='flex flex-col gap-4 w-full md:w-1/2'>
                     <h3 className='text-xl font-semibold text-gray-800'>Send us a message</h3>
 
                     <div className='flex flex-col gap-1'>

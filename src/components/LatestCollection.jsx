@@ -65,7 +65,7 @@ const LatestCollection = () => {
   }, []);
 
   return (
-    <div className='my-12 max-w-[1400px] mx-auto'>
+    <div className='my-16 max-w-[1400px] mx-auto'>
       <div className='py-6 text-3xl text-center'>
         <Title text1={'Top'} text2={'Categories'} />
       </div>

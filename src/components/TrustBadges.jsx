@@ -5,58 +5,56 @@ const TrustBadges = () => {
   const badges = [
     {
       text: "Dermatologist Approved",
-      icon: <FaUserMd className="w-5 h-5 sm:w-6 sm:h-6 text-[#2b6cb0]" />
+      icon: <FaUserMd className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
     },
     {
       text: "1000s Of Success Stories",
-      icon: <FaStar className="w-5 h-5 sm:w-6 sm:h-6 text-[#2b6cb0]" />
+      icon: <FaStar className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
     },
     {
       text: "Cruelty Free",
-      icon: <FaPaw className="w-5 h-5 sm:w-6 sm:h-6 text-[#2b6cb0]" />
+      icon: <FaPaw className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
     },
     {
       text: "Sulphate & Paraben Free",
-      icon: <FaLeaf className="w-5 h-5 sm:w-6 sm:h-6 text-[#2b6cb0]" />
+      icon: <FaLeaf className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
     },
     {
       text: "100K+ Customers",
-      icon: <FaUsers className="w-5 h-5 sm:w-6 sm:h-6 text-[#2b6cb0]" />
+      icon: <FaUsers className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
     }
   ];
 
+  // 4 repetitions (2 sets of 10) for seamless -50% marquee loop
+  const displayBadges = [...badges, ...badges, ...badges, ...badges];
+
   return (
-    <div className="w-full border-b border-[#93bdd4] py-3 sm:py-5 overflow-hidden" style={{ backgroundColor: '#B0D1E4' }}>
+    <div className="w-full border-b border-[#98C7DC] py-3 sm:py-4 overflow-hidden select-none" style={{ backgroundColor: '#98C7DC' }}>
       <style>{`
-        @keyframes marquee {
+        @keyframes marqueeTrust {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
         }
-        .animate-marquee {
-          animation: marquee 28s linear infinite;
+        .animate-trust-marquee {
+          display: flex;
+          width: max-content;
+          animation: marqueeTrust 24s linear infinite;
         }
-        .animate-marquee:hover {
+        .animate-trust-marquee:hover {
           animation-play-state: paused;
         }
-        /* --per = how many badges fit on screen; the half badge hints there is more */
-        .trust-track { --gap: 1.75rem; --per: 1.5; }
-        @media (min-width: 640px) { .trust-track { --per: 2.5; } }
-        @media (min-width: 1024px) { .trust-track { --per: 3.5; --gap: 3rem; } }
-        @media (min-width: 1280px) { .trust-track { --per: 4.5; --gap: 3.5rem; } }
-        .trust-badge { width: calc((100vw - var(--gap) * var(--per)) / var(--per)); }
       `}</style>
 
-      <div className="flex w-max animate-marquee trust-track" style={{ gap: 'var(--gap)' }}>
-        {/* Render badges twice for seamless looping */}
-        {[...badges, ...badges].map((badge, index) => (
+      <div className="animate-trust-marquee">
+        {displayBadges.map((badge, index) => (
           <div
             key={index}
-            className="trust-badge flex flex-shrink-0 items-center gap-2.5 sm:gap-3"
+            className="w-[50vw] md:w-[calc(100vw/4.5)] flex-shrink-0 flex items-center justify-center gap-2 sm:gap-2.5 px-2"
           >
-            <div className="flex items-center justify-center flex-shrink-0 p-2 bg-white border border-gray-100 rounded-full shadow-sm">
+            <div className="flex items-center justify-center flex-shrink-0 p-1.5 sm:p-2 bg-white border border-gray-100 rounded-full shadow-sm">
               {badge.icon}
             </div>
-            <span className="text-[#2b6cb0] font-bold text-[11px] sm:text-xs lg:text-sm uppercase leading-tight">
+            <span className="text-black font-bold text-[10px] sm:text-xs lg:text-sm uppercase leading-tight whitespace-nowrap">
               {badge.text}
             </span>
           </div>

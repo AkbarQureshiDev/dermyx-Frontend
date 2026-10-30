@@ -192,8 +192,8 @@ const Navbar = () => {
     return (
         <header ref={headerRef} className={`w-full font-sans bg-white select-none sticky top-0 z-[60] transition-shadow duration-300 ${collapsed ? 'shadow-lg' : ''}`}>
             {/* ------------ Top Announcement Bar (hides on scroll) ------------ */}
-            <div className={`overflow-hidden transition-all duration-300 ease-out ${collapsed ? 'max-h-0 opacity-0' : 'max-h-20 opacity-100'}`}>
-                <div className='bg-black text-white py-4 px-4 text-xs sm:text-sm font-semibold tracking-wider uppercase overflow-hidden'>
+            <div className={`overflow-hidden transition-all duration-300 ease-out ${collapsed ? 'max-h-0 opacity-0' : 'max-h-23 opacity-100'}`}>
+                <div className='bg-[#98C7DC] text-black py-4 px-4 text-xs sm:text-sm font-semibold tracking-wider uppercase overflow-hidden'>
                 <div className='flex w-max animate-marquee-banner whitespace-nowrap'>
                     {[
                         '✦ Dermatologist Tested',

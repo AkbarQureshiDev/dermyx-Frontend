@@ -1,213 +1,203 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Title from './Title';
 
-const CARDS = 6;
-
-// Real Instagram review screenshots. Each strip already contains the reviewer's
-// own avatar, handle and text, so it must be shown whole — never object-cover.
-const modules = import.meta.glob('../assets/Reviews/*.jpeg', { eager: true, query: '?url', import: 'default' });
-const SOURCES = Object.keys(modules).sort().map(key => modules[key]);
-
-// Round-robin keeps all six cards filled even if the image count changes.
-const GROUPS = Array.from({ length: CARDS }, (_, cardIndex) =>
-  SOURCES.filter((_, i) => i % CARDS === cardIndex)
-).filter(group => group.length > 0);
-
-const ReviewCard = ({ images, cardIndex, onOpen }) => {
-  const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const total = images.length;
-
-  // Stagger the interval per card so the six galleries don't flip in unison.
-  // `active` is a dependency so a manual dot click restarts the countdown
-  // instead of being overridden by a rotation that was already due.
-  useEffect(() => {
-    if (paused || total < 2) return;
-    const timer = setInterval(() => setActive(prev => (prev + 1) % total), 3200 + cardIndex * 450);
-    return () => clearInterval(timer);
-  }, [paused, total, cardIndex, active]);
-
-  return (
-    <div
-      className="group relative h-full flex flex-col gap-3 rounded-3xl border border-[#F6D9E7] bg-white p-4 sm:p-5 shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300 hover:-translate-y-1.5 hover:border-[#FCB4C5] hover:shadow-[0_16px_36px_rgba(252,180,197,0.32)]"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      {/* Decorative quote glyph */}
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-1 right-4 prata-regular text-6xl leading-none text-[#FBCBE2] transition-colors duration-300 group-hover:text-[#FCB4C5]"
-      >&rdquo;</span>
-
-      {/* Review strip */}
-      <button
-        type="button"
-        onClick={() => onOpen(cardIndex, active)}
-        aria-label={`Open review ${active + 1} of ${total}`}
-        className="relative block w-full h-[136px] sm:h-[150px] lg:h-[160px] rounded-2xl bg-white overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FCB4C5]"
-      >
-        {images.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt={`Customer review ${i + 1}`}
-            loading={cardIndex === 0 && i === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-contain p-1 transition-opacity duration-500 ease-out"
-            style={{ opacity: active === i ? 1 : 0 }}
-          />
-        ))}
-
-        {/* Hover affordance */}
-        <span className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-[#2C6B8D]/85 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
-          </svg>
-        </span>
-      </button>
-
-      {/* Progress dots */}
-      <div className="mt-auto flex items-center justify-center gap-1.5">
-        {images.map((src, i) => (
-          <button
-            key={src}
-            type="button"
-            onClick={() => setActive(i)}
-            aria-label={`Show review ${i + 1}`}
-            aria-current={active === i}
-            className={`h-1.5 rounded-full transition-all duration-300 ${
-              active === i ? 'w-7 bg-[#FCB4C5]' : 'w-1.5 bg-[#F6D9E7] hover:bg-[#FCB4C5]/60'
-            }`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
-
-const Lightbox = ({ index, group, onClose, onStep }) => {
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') onClose();
-      if (e.key === 'ArrowRight') onStep(1);
-      if (e.key === 'ArrowLeft') onStep(-1);
-    };
-    document.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [onClose, onStep]);
-
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Customer review"
-      onClick={onClose}
-      className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 p-2 backdrop-blur-sm sm:p-8"
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-3xl rounded-3xl bg-white p-3 shadow-2xl sm:p-6"
-      >
-        <img
-          src={group[index]}
-          alt={`Customer review ${index + 1} of ${group.length}`}
-          className="mx-auto block max-h-[70vh] w-auto max-w-full object-contain"
-        />
-
-        <button
-          type="button"
-          onClick={onClose}
-          aria-label="Close"
-          className="absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-full bg-white text-gray-500 shadow-lg transition-colors hover:text-gray-900 sm:-right-3 sm:-top-3"
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-
-        {group.length > 1 && (
-          <>
-            <button
-              type="button"
-              onClick={() => onStep(-1)}
-              aria-label="Previous review"
-              className="absolute left-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-md transition-transform hover:scale-110 active:scale-95 sm:-left-4"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={() => onStep(1)}
-              aria-label="Next review"
-              className="absolute right-1 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-gray-700 shadow-md transition-transform hover:scale-110 active:scale-95 sm:-right-4"
-            >
-              <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
-          </>
-        )}
-
-        <p className="mt-3 text-center text-xs font-medium tracking-wide text-gray-400">
-          {index + 1} / {group.length}
-        </p>
-      </div>
-    </div>
-  );
-};
+const testimonialsData = [
+  {
+    id: 1,
+    name: 'Razaq',
+    rating: 5,
+    testimonial: 'This cleanser has genuinely transformed my daily routine. My skin used to be excessively oily, especially around the T-zone, but after just two weeks of use it feels completely balanced and smooth. It cleans deeply without stripping moisture away, leaving a fresh, healthy texture all day long!'
+  },
+  {
+    id: 2,
+    name: 'Ayesha',
+    rating: 5,
+    testimonial: 'I personally used this face wash and their texture, fragrance is ufffffff I have no words to explain...! The price is super reasonable and my face looks so shiny, clear and glowing within just a week. Highly gentle on sensitive skin, absolutely must try this 1000% recommended!'
+  },
+  {
+    id: 3,
+    name: 'Dr Aqsa',
+    rating: 5,
+    testimonial: "Honestly, your cleanser was so good that I genuinely felt like recommending it again and again. It's rare that I like a product this much, but this one really impressed me. The texture, feel and overall experience were just so good that I couldn't stop myself from recommending it to everyone around me. ✨✨"
+  },
+  {
+    id: 4,
+    name: 'Kainat',
+    rating: 5,
+    testimonial: 'Here is my honest review: this is hands down the best cleanser I have ever tried! Tysm for creating this absolute gem 💎. It removes all impurities effortlessly, leaves zero residue or dryness, and gives an instant soft glow. Truly a skincare essential I will keep repurchasing!'
+  },
+  {
+    id: 5,
+    name: 'Sadia Khan',
+    rating: 5,
+    testimonial: "More power to you, you'll always be my favourite skincare brand! My whole team is fond of your cleanser seriously. It feels so luxurious yet gentle, perfectly controls breakouts, and makes the skin look revitalized every single morning. Can't imagine my skincare shelf without it!"
+  }
+];
 
 const Testimonials = () => {
-  const [open, setOpen] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
-  const stepOpen = (delta) => setOpen(prev => {
-    if (!prev) return prev;
-    const n = GROUPS[prev.card].length;
-    return { ...prev, index: (prev.index + delta + n) % n };
-  });
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(3);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  if (GROUPS.length === 0) return null;
+  const maxIndex = Math.max(0, testimonialsData.length - itemsPerPage);
+
+  useEffect(() => {
+    if (currentIndex > maxIndex) {
+      setCurrentIndex(maxIndex);
+    }
+  }, [maxIndex, currentIndex]);
+
+  // Auto scroll after every 5 seconds
+  useEffect(() => {
+    if (isPaused || maxIndex <= 0) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [maxIndex, isPaused]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev < maxIndex ? prev + 1 : 0));
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : maxIndex));
+  };
+
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    if (isLeftSwipe) {
+      handleNext();
+    }
+    if (isRightSwipe) {
+      handlePrev();
+    }
+  };
 
   return (
     <section
       aria-label="Customer Testimonials"
-      className="relative my-10 w-full select-none overflow-hidden py-16 sm:py-20"
+      className="relative w-full mt-16 mb-8 md:my-32 py-4 sm:py-6 select-none"
     >
       <div className="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-
-        <div className="text-center py-6 sm:py-8 text-xl sm:text-3xl">
+        {/* Title kept unchanged */}
+        <div className="text-center pb-6 sm:pb-8 text-xl sm:text-3xl">
           <Title text1={'What Our Clients'} text2={'Say About Us'} />
         </div>
-        <p className="-mt-4 mb-10 text-center text-sm text-gray-500">
-          Unfiltered screenshots from real customers &mdash; tap any card to read it full size
-        </p>
 
-        <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
-          {GROUPS.map((group, cardIndex) => (
-            <ReviewCard
-              key={cardIndex}
-              cardIndex={cardIndex}
-              images={group}
-              onOpen={(card, index) => setOpen({ card, index })}
-            />
-          ))}
+        {/* Carousel Slider */}
+        <div
+          className="relative w-full"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Cards Track */}
+          <div
+            className="overflow-hidden w-full py-1"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / itemsPerPage)}%)`
+              }}
+            >
+              {testimonialsData.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex-shrink-0 px-2 sm:px-2.5"
+                  style={{ width: `${100 / itemsPerPage}%` }}
+                >
+                  <div className="w-full h-[290px] bg-[#98C7DC] rounded-3xl py-6 sm:py-7 px-5 sm:px-6 flex flex-col items-center justify-start shadow-sm border border-black/5 hover:shadow-md transition-shadow">
+                    {/* 1. Empty profile image */}
+                    <div className="w-20 h-20 rounded-full bg-white/60 border-2 border-white shadow-xs flex items-center justify-center text-gray-600 overflow-hidden flex-shrink-0 mb-1">
+                      <svg
+                        className="w-8 h-8 sm:w-10 sm:h-10 text-gray-600"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                      </svg>
+                    </div>
+
+                    {/* 2. Client Name */}
+                    <h3 className="font-semibold text-gray-900 text-lg text-center leading-tight my-3">
+                      {item.name}
+                    </h3>
+
+                    {/* 3. Review star in black color */}
+                    <div className="flex items-center justify-center gap-1 mb-1.5 text-black">
+                      {[...Array(item.rating || 5)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="w-4 h-4 fill-black text-black"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      ))}
+                    </div>
+
+                    {/* 4. Review text - 4 to 5 lines */}
+                    <p className="text-gray-800 text-xs sm:text-sm text-center leading-relaxed flex-1 flex items-center justify-center line-clamp-5 overflow-hidden">
+                      "{item.testimonial}"
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Bottom Pagination Navigation Dots */}
+          <div className="mt-6 sm:mt-8 flex items-center justify-center gap-2">
+            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setCurrentIndex(i)}
+                aria-label={`Go to testimonial slide ${i + 1}`}
+                aria-current={currentIndex === i}
+                className={`h-2.5 rounded-full transition-all duration-300 focus:outline-none ${
+                  currentIndex === i
+                    ? 'w-7 bg-[#98C7DC]'
+                    : 'w-2.5 bg-gray-300 hover:bg-gray-400'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
-
-      {open && (
-        <Lightbox
-          index={open.index}
-          group={GROUPS[open.card]}
-          onClose={() => setOpen(null)}
-          onStep={stepOpen}
-        />
-      )}
     </section>
   );
 };
