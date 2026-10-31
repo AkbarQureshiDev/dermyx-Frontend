@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContextValue'
 import Stars from './Stars'
@@ -6,7 +6,17 @@ import { optimizeImage } from '../utils/seo'
 
 const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating, reviewCount }) => {
   const { currency, addToCart } = useContext(ShopContext)
+  const [isAdded, setIsAdded] = useState(false)
   const soldOut = inStock === false
+
+  const handleAddToCart = () => {
+    if (soldOut) return
+    addToCart(id)
+    setIsAdded(true)
+    setTimeout(() => {
+      setIsAdded(false)
+    }, 1500)
+  }
 
   const discountPct =
     originalPrice && originalPrice > price
@@ -82,19 +92,41 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
       <button
         type="button"
         disabled={soldOut}
-        onClick={() => { if (!soldOut) addToCart(id) }}
-        className={`w-full py-2 sm:py-3 px-2 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 sm:gap-2 mt-auto transition-colors border-0 ${
+        onClick={handleAddToCart}
+        className={`w-full py-2 sm:py-3 px-2 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 sm:gap-2 mt-auto transition-all duration-200 active:scale-95 border-0 ${
           soldOut
             ? 'bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed'
+            : isAdded
+            ? 'bg-emerald-500 text-white shadow-emerald-200 shadow-md scale-[1.02]'
             : 'bg-[#B0D1E4] hover:bg-[#93bdd4] text-[#1e293b] cursor-pointer'
         }`}
       >
-        <svg className="w-3.5 h-3.5 sm:w-[17px] sm:h-[17px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <path d="M16 10a4 4 0 01-8 0" />
-        </svg>
-        <span>{soldOut ? 'Out of stock' : 'Add to cart'}</span>
+        {soldOut ? (
+          <>
+            <svg className="w-3.5 h-3.5 sm:w-[17px] sm:h-[17px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            <span>Out of stock</span>
+          </>
+        ) : isAdded ? (
+          <>
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            <span>Added to Bag!</span>
+          </>
+        ) : (
+          <>
+            <svg className="w-3.5 h-3.5 sm:w-[17px] sm:h-[17px] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            <span>Add to cart</span>
+          </>
+        )}
       </button>
     </div>
   )

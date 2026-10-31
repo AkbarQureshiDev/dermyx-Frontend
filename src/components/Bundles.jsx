@@ -10,6 +10,7 @@ const Bundles = () => {
     const [startIndex, setStartIndex] = useState(0)
     const [animating, setAnimating] = useState(false)
     const [isPaused, setIsPaused] = useState(false)
+    const [addedId, setAddedId] = useState(null)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -50,7 +51,12 @@ const Bundles = () => {
         e.preventDefault()
         e.stopPropagation()
         addToCart(itemId)
-        navigate('/cart')
+        setAddedId(itemId)
+        // Let the added state register before the cart page takes over.
+        setTimeout(() => {
+            setAddedId(null)
+            navigate('/cart')
+        }, 900)
     }
 
     const getVisibleBundles = () => {
@@ -105,12 +111,18 @@ const Bundles = () => {
                         </span>
                         <button
                             onClick={(e) => handleAddToCart(e, item._id)}
-                            aria-label="Add to Cart"
-                            className="w-11 h-11 bg-slate-950 text-white rounded-full flex items-center justify-center shadow-md transform transition-all duration-300 group-hover:scale-105 active:scale-95"
+                            aria-label={addedId === item._id ? 'Added to cart' : 'Add to Cart'}
+                            className={`w-11 h-11 rounded-full flex items-center justify-center shadow-md transform transition-all duration-300 group-hover:scale-105 active:scale-95 ${addedId === item._id ? 'bg-emerald-500 text-white' : 'bg-slate-950 text-white'}`}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 fill-current" viewBox="0 0 24 24">
-                                <path d="M16 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM21 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM7.1 14h12.8a1 1 0 0 0 .9-.6l3.6-7.2a1 1 0 0 0-.9-1.4H5.2L4.3 2.1A1 1 0 0 0 3.3 1.3H1v2h1.4l3.6 8a1 1 0 0 0 .9.7z"/>
-                            </svg>
+                            {addedId === item._id ? (
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 fill-current" viewBox="0 0 24 24">
+                                    <path d="M16 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM21 18a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM7.1 14h12.8a1 1 0 0 0 .9-.6l3.6-7.2a1 1 0 0 0-.9-1.4H5.2L4.3 2.1A1 1 0 0 0 3.3 1.3H1v2h1.4l3.6 8a1 1 0 0 0 .9.7z"/>
+                                </svg>
+                            )}
                         </button>
                     </div>
                 </div>
