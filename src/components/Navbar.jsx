@@ -2,53 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { assets } from '../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContextValue'
-import { bundleTotal, sizeLabel } from '../utils/bundlePricing'
-
-const CartDropdown = () => {
-    const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext)
-
-    const cartData = []
-    for (const id in cartItems) {
-        for (const size in cartItems[id]) {
-            if (cartItems[id][size] > 0) {
-                const product = products.find(p => p._id === id)
-                if (product) cartData.push({ product, size, quantity: cartItems[id][size] })
-            }
-        }
-    }
-
-    return (
-        <div className='bg-white border border-gray-100 rounded-xl shadow-2xl overflow-hidden'>
-            {cartData.length === 0 ? (
-                <div className='p-6 text-center text-sm text-gray-400'>Your cart is empty</div>
-            ) : (
-                <>
-                    <div className='max-h-64 overflow-y-auto divide-y divide-gray-100'>
-                        {cartData.map(({ product, size, quantity }, i) => (
-                            <div key={i} className='flex items-center gap-3 px-4 py-3'>
-                                <img src={product.image[0]} alt={product.name} className='w-12 h-12 object-cover rounded-lg flex-shrink-0' />
-                                <div className='flex-1 min-w-0'>
-                                    <p className='text-xs font-semibold text-gray-800 truncate'>{product.name}</p>
-                                    <p className='text-xs text-gray-400 mt-0.5'>{sizeLabel(size, quantity)} · Qty {quantity}</p>
-                                    <p className='text-xs font-bold text-gray-900 mt-0.5'>{currency}{bundleTotal(product.price, quantity).toFixed(2)}</p>
-                                </div>
-                                <button onClick={() => updateQuantity(product._id, size, 0)} className='text-gray-300 hover:text-red-400 transition-colors text-lg leading-none flex-shrink-0'>×</button>
-                            </div>
-                        ))}
-                    </div>
-                    <div className='px-4 py-3 border-t border-gray-100 bg-gray-50'>
-                        <button
-                            onClick={() => navigate('/cart')}
-                            className='w-full bg-black text-white text-xs font-semibold py-2.5 rounded-lg hover:bg-gray-800 transition-colors'
-                        >
-                            VIEW CART ({cartData.length})
-                        </button>
-                    </div>
-                </>
-            )}
-        </div>
-    )
-}
 
 const Navbar = () => {
     const [visible, setVisible] = useState(false);
@@ -276,11 +229,6 @@ const Navbar = () => {
                                 {getCartCount()}
                             </span>
                         </Link>
-
-                        {/* Cart Dropdown */}
-                        <div className='absolute right-0 top-full pt-3 z-50 hidden group-hover:block w-72 sm:w-80'>
-                            <CartDropdown />
-                        </div>
                     </div>
                 </div>
             </div>
