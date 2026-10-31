@@ -139,7 +139,7 @@ const Testimonials = () => {
                   className="flex-shrink-0 px-2 sm:px-2.5"
                   style={{ width: `${100 / itemsPerPage}%` }}
                 >
-                  <div className="w-full h-[290px] bg-[#98C7DC] rounded-3xl py-6 sm:py-7 px-5 sm:px-6 flex flex-col items-center justify-start shadow-sm border border-black/5 hover:shadow-md transition-shadow">
+                  <div className="w-full h-[290px] bg-[#BFE3FD] rounded-3xl py-6 sm:py-7 px-5 sm:px-6 flex flex-col items-center justify-start shadow-sm border border-black/5 hover:shadow-md transition-shadow">
                     {/* 1. Empty profile image */}
                     <div className="w-20 h-20 rounded-full bg-white/60 border-2 border-white shadow-xs flex items-center justify-center text-gray-600 overflow-hidden flex-shrink-0 mb-1">
                       <svg

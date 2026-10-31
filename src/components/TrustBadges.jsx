@@ -29,7 +29,7 @@ const TrustBadges = () => {
   const displayBadges = [...badges, ...badges, ...badges, ...badges];
 
   return (
-    <div className="w-full border-b border-[#98C7DC] py-2.5 sm:py-4 overflow-hidden select-none" style={{ backgroundColor: '#98C7DC' }}>
+    <div className="w-full border-b border-[#98C7DC] py-2.5 sm:py-4 overflow-hidden select-none" style={{ backgroundColor: '#BFE3FD' }}>
       <style>{`
         @keyframes marqueeTrust {
           0% { transform: translateX(0); }

@@ -2,7 +2,7 @@ import React from 'react';
 
 const FiercelyBanner = () => {
   return (
-    <div style={{ backgroundColor: '#98C7DC' }} className="relative w-full my-[15px] overflow-hidden py-10 sm:py-14">
+    <div style={{ backgroundColor: '#BFE3FD' }} className="relative w-full my-[15px] overflow-hidden py-10 sm:py-14">
 
       {/* Main text - centered */}
       <div className="flex justify-center items-center px-8 sm:px-[20%] lg:px-[28%] xl:px-[32%]">

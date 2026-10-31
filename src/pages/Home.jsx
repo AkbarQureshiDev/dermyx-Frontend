@@ -12,6 +12,7 @@ import VideoSection from '../components/VideoSection'
 import Faqs from '../components/Faqs'
 import NewsletterBox from '../components/NewsletterBox'
 import brandBanner from '../assets/banner.jpg'
+import brandBannerMobile from '../assets/mb_banner.png'
 
 const Home = () => {
   return (
@@ -43,12 +44,15 @@ const Home = () => {
 
       {/* 7b. Brand credibility banner - full bleed, artwork carries its own copy */}
       <div className='lg:px-[15px] lg:my-[15px]'>
-        <img
-          src={brandBanner}
-          alt="Dermyx - Pakistan's No. 1 Skincare Brand, with the full product range shown beside a dermatologist"
-          className='block w-full h-auto rounded-[15px]'
-          loading='lazy'
-        />
+        <picture className='block'>
+          <source media='(min-width: 640px)' srcSet={brandBanner} />
+          <img
+            src={brandBannerMobile}
+            alt="Dermyx - Pakistan's No. 1 Skincare Brand, with the full product range shown beside a dermatologist"
+            className='block w-full h-auto rounded-[15px]'
+            loading='lazy'
+          />
+        </picture>
       </div>
 
       {/* 7. Testimonials - customer validation */}

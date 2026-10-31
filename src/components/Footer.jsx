@@ -5,7 +5,7 @@ import { FaInstagram, FaFacebookF, FaTiktok, FaYoutube, FaPhone, FaEnvelope, FaM
 
 const Footer = () => {
   return (
-    <div style={{ backgroundColor: '#98C7DC' }} className='-mx-4 sm:-mx-[5vw] md:-mx-[7vw] lg:-mx-[9vw] px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] mt-20'>
+    <div style={{ backgroundColor: '#BFE3FD' }} className='-mx-4 sm:-mx-[5vw] md:-mx-[7vw] lg:-mx-[9vw] px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] mt-20'>
 
       <div className='flex flex-col sm:grid grid-cols-3 gap-14 py-14 text-sm'>
 
