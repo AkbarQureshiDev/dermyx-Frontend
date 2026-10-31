@@ -11,6 +11,7 @@ const Section = ({ title, children }) => (
 const RefundPolicy = () => {
   return (
     <div className='max-w-4xl mx-auto py-10'>
+      <h1 className='sr-only'>Refund and Return Policy — Dermyx Skincare</h1>
 
       <div className='text-2xl text-center pb-6 border-t pt-8'>
         <Title text1={'REFUND'} text2={'POLICY'} />

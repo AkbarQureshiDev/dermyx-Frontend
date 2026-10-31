@@ -5,6 +5,7 @@ import NewsletterBox from '../components/NewsletterBox'
 const About = () => {
   return (
     <div>
+      <h1 className='sr-only'>About Dermyx Skincare — dermatologist-tested skincare made for Pakistani skin</h1>
 
       <div className='text-2xl text-center pt-8 border-t'>
         <Title text1={'ABOUT'} text2={'US'} />

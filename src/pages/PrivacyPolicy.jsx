@@ -12,6 +12,7 @@ const Section = ({ title, children }) => (
 const PrivacyPolicy = () => {
   return (
     <div className='max-w-4xl mx-auto py-10'>
+      <h1 className='sr-only'>Privacy Policy — Dermyx Skincare</h1>
 
       <div className='text-2xl text-center pb-6 border-t pt-8'>
         <Title text1={'PRIVACY'} text2={'POLICY'} />

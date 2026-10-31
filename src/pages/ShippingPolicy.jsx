@@ -11,6 +11,7 @@ const Section = ({ title, children }) => (
 const ShippingPolicy = () => {
   return (
     <div className='max-w-4xl mx-auto py-10'>
+      <h1 className='sr-only'>Shipping Policy — Dermyx Skincare delivery across Pakistan</h1>
 
       <div className='text-2xl text-center pb-6 border-t pt-8'>
         <Title text1={'SHIPPING'} text2={'POLICY'} />

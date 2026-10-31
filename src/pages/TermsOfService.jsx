@@ -12,6 +12,7 @@ const Section = ({ title, children }) => (
 const TermsOfService = () => {
   return (
     <div className='max-w-4xl mx-auto py-10'>
+      <h1 className='sr-only'>Terms of Service — Dermyx Skincare</h1>
 
       <div className='text-2xl text-center pb-6 border-t pt-8'>
         <Title text1={'TERMS OF'} text2={'SERVICE'} />
