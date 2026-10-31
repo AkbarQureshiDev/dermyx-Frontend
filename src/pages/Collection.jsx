@@ -4,6 +4,31 @@ import { ShopContext } from '../context/ShopContextValue'
 import { assets } from '../assets/assets';
 import Title from '../components/Title';
 import ProductItem from '../components/ProductItem';
+import Seo from '../components/Seo';
+import { BRAND_TERMS, PRODUCT_TERMS } from '../utils/seo';
+
+const COLLECTION_SEO = {
+  all: {
+    title: 'All Skincare Products Online in Pakistan',
+    description: 'Browse every Dermyx product: acne face wash, dark spot brightening cream, SPF 50 matte sunblock, anti hair fall shampoo and money-saving skincare bundles. Cash on delivery across Pakistan.',
+  },
+  'Face Care': {
+    title: 'Face Care Products in Pakistan | Acne Face Wash & SPF 50 Sunblock',
+    description: 'Dermyx face care for Pakistani skin: CLENZIC 3-in-1 acne face wash with AHA + BHA + LHA, and SUNBAE SPF 50 PA+++ matte sunblock with no white cast.',
+  },
+  'Hair Care': {
+    title: 'Hair Care in Pakistan | FOLIGROW Anti Hair Fall Shampoo',
+    description: 'FOLIGROW hairfall treatment shampoo with Procapil + Anagain strengthens follicles, reduces hair fall and supports regrowth for all hair types.',
+  },
+  'Skin Care': {
+    title: 'Skin Care in Pakistan | LUVANTE Dark Spot Brightening Cream',
+    description: 'LUVANTE skin brightening cream fades dark spots, acne marks and uneven tone with dermatologist-tested, non-comedogenic care for all skin types.',
+  },
+  bundles: {
+    title: 'Skincare Bundles in Pakistan | Save More with Dermyx',
+    description: 'Save with Dermyx bundles: acne face wash, brightening cream, sunblock and shampoo combinations for clear skin, glow and stronger hair — dermatologically tested.',
+  },
+};
 
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
@@ -88,8 +113,23 @@ const Collection = () => {
   // Extract all categories dynamically or fallback
   const availableCategories = ['Face Care', 'Hair Care', 'Skin Care'];
 
+  const seoKey = tag === 'bundle' ? 'bundles' : (category.length === 1 && COLLECTION_SEO[category[0]] ? category[0] : 'all');
+  const seo = COLLECTION_SEO[seoKey];
+  const seoPath = tag === 'bundle'
+    ? '/collection?tag=bundle'
+    : seoKey !== 'all'
+      ? `/collection?category=${encodeURIComponent(seoKey)}`
+      : '/collection';
+
   return (
     <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 pt-8 sm:pt-10 border-t border-gray-100">
+      <Seo
+        title={seo.title}
+        description={seo.description}
+        path={seoPath}
+        keywords={[...BRAND_TERMS, ...PRODUCT_TERMS].join(', ')}
+      />
+      <h1 className='sr-only'>{seo.title}</h1>
       
       {/* Filter Sidebar — sticks under the header once its top edge reaches it */}
       <div

@@ -11,12 +11,32 @@ import OurPolicy from '../components/OurPolicy'
 import VideoSection from '../components/VideoSection'
 import Faqs from '../components/Faqs'
 import NewsletterBox from '../components/NewsletterBox'
+import Seo from '../components/Seo'
+import { faqs } from '../components/Faqs'
 import brandBanner from '../assets/banner.jpg'
 import brandBannerMobile from '../assets/mb_banner.png'
+import { BRAND_TERMS, PRODUCT_TERMS } from '../utils/seo'
 
 const Home = () => {
   return (
     <div>
+      <Seo
+        title='Dermyx Skincare Pakistan | Acne Face Wash, SPF 50 Sunblock & Hair Fall Shampoo'
+        description='Shop Dermyx dermatologist-tested skincare in Pakistan — CLENZIC acne face wash, LUVANTE brightening cream, SUNBAE SPF 50 matte sunblock and FOLIGROW hair fall shampoo. Cash on delivery.'
+        path='/'
+        keywords={[...BRAND_TERMS, ...PRODUCT_TERMS].join(', ')}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map(({ q, a }) => ({
+            '@type': 'Question',
+            name: q,
+            acceptedAnswer: { '@type': 'Answer', text: a },
+          })),
+        }}
+      />
+
+      <h1 className='sr-only'>Dermyx Skincare — dermatologist-tested acne, dark spot and hair fall products in Pakistan</h1>
 
       {/* 1. Hero - full width slider, first impression */}
       <Hero />

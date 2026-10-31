@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -19,11 +19,48 @@ import Footer from './components/Footer'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Verify from './pages/Verify'
+import Seo from './components/Seo'
+
+const STATIC_SEO = {
+  '/about': {
+    title: 'About Dermyx Skincare | Dermatologist-Tested Skincare in Pakistan',
+    description: 'Dermyx brings dermatologist-grade formulas to Pakistani skin — accessible, affordable and real. Meet the team behind CLENZIC, LUVANTE, SUNBAE and FOLIGROW.',
+  },
+  '/contact': {
+    title: 'Contact Dermyx Skincare',
+    description: 'Contact Dermyx Skincare for orders, delivery questions or product advice. WhatsApp, email and social support for customers across Pakistan.',
+  },
+  '/privacy-policy': {
+    title: 'Privacy Policy',
+    description: 'How Dermyx Skincare collects, uses and protects your personal data when you shop skincare online in Pakistan.',
+  },
+  '/refund-policy': {
+    title: 'Refund & Return Policy',
+    description: 'Dermyx refund and return policy — eligibility, timelines and how to start a return for your skincare order.',
+  },
+  '/shipping-policy': {
+    title: 'Shipping Policy',
+    description: 'Dermyx shipping policy — delivery times, charges and cash on delivery details for skincare orders across Pakistan.',
+  },
+  '/terms-of-service': {
+    title: 'Terms of Service',
+    description: 'Terms of service for shopping skincare and haircare with Dermyx Skincare online.',
+  },
+  '/cart': { title: 'Your Cart', description: 'Review the Dermyx products in your bag, update quantities and continue to checkout.', noindex: true },
+  '/login': { title: 'Sign In', description: 'Sign in to your Dermyx account to track orders and check out faster.', noindex: true },
+  '/place-order': { title: 'Checkout', description: 'Complete your Dermyx order with delivery details and cash on delivery or online payment.', noindex: true },
+  '/orders': { title: 'My Orders', description: 'Track your Dermyx skincare orders, delivery status and history.', noindex: true },
+  '/verify': { title: 'Order Verification', description: 'Confirm your Dermyx payment to complete your order.', noindex: true },
+}
 
 const App = () => {
+  const { pathname } = useLocation()
+  const staticSeo = STATIC_SEO[pathname]
+
   return (
     <div className='w-full min-h-screen bg-white'>
       <ToastContainer />
+      {staticSeo && <Seo path={pathname} {...staticSeo} />}
       
       {/* Full width Header & Navbar */}
       <Navbar />

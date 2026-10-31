@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContextValue'
 import RelatedProducts from '../components/RelatedProducts'
 import ProductReviews from '../components/ProductReviews'
+import Seo from '../components/Seo'
 import { MdCheckCircle } from 'react-icons/md'
 import { getTiers } from '../utils/bundlePricing'
+import { SITE_URL, optimizeImage, pageUrl, stripText } from '../utils/seo'
 
 const Product = () => {
 
@@ -31,10 +33,68 @@ const Product = () => {
     })
   }, [productId, products])
 
-  const outOfStock = productData?.inStock === false
+  if (!productData) return <div className='opacity-0'></div>
 
-  return productData ? (
+  const outOfStock = productData.inStock === false
+  const productUrl = pageUrl(`/product/${productId}`)
+  const cleanDescription = stripText(productData.description)
+  const seoDescription = cleanDescription.slice(0, 158)
+  const categoryPath = `/collection?category=${encodeURIComponent(productData.category)}`
+
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Product',
+        name: productData.name,
+        description: cleanDescription,
+        image: (productData.image || []).slice(0, 4),
+        sku: productData._id,
+        category: productData.category,
+        brand: { '@type': 'Brand', name: 'Dermyx' },
+        offers: {
+          '@type': 'Offer',
+          url: productUrl,
+          priceCurrency: 'PKR',
+          price: productData.price,
+          availability: outOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+          itemCondition: 'https://schema.org/NewCondition',
+          seller: { '@type': 'Organization', name: 'Dermyx Skincare' },
+        },
+        ...(Number(productData.reviewCount) > 0 && Number(productData.rating) > 0
+          ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: productData.rating, reviewCount: productData.reviewCount } }
+          : {}),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: productData.category, item: `${SITE_URL}${categoryPath}` },
+          { '@type': 'ListItem', position: 3, name: productData.name, item: productUrl },
+        ],
+      },
+    ],
+  }
+
+  return (
     <div className='border-t-2 pt-10 transition-opacity ease-in duration-500 opacity-100'>
+      <Seo
+        title={productData.name}
+        description={seoDescription}
+        path={`/product/${productId}`}
+        image={(productData.image || [])[0]}
+        type='product'
+        keywords={['dermyx', productData.name, productData.category, 'buy online pakistan'].join(', ')}
+        jsonLd={productJsonLd}
+      />
+
+      <nav aria-label='Breadcrumb' className='mb-5 flex flex-wrap items-center gap-2 text-xs text-gray-500'>
+        <Link to='/' className='hover:text-black transition-colors'>Home</Link>
+        <span aria-hidden='true'>/</span>
+        <Link to={categoryPath} className='hover:text-black transition-colors'>{productData.category}</Link>
+        <span aria-hidden='true'>/</span>
+        <span className='text-gray-800 font-medium'>{productData.name}</span>
+      </nav>
 
       <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row'>
 
@@ -42,8 +102,10 @@ const Product = () => {
         <div className='flex-1'>
           <img
             className='w-full h-auto transition-opacity duration-500'
-            src={productData.image[imgIndex]}
-            alt={productData.name}
+            src={optimizeImage(productData.image[imgIndex], 1000)}
+            alt={`${productData.name} — ${productData.category} by Dermyx`}
+            loading='eager'
+            decoding='async'
           />
         </div>
 
@@ -225,7 +287,7 @@ const Product = () => {
       <RelatedProducts category={productData.category} />
 
     </div>
-  ) : <div className='opacity-0'></div>
+  )
 }
 
 export default Product

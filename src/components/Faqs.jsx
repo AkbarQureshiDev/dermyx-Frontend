@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const faqs = [
+export const faqs = [
   {
     q: 'What is your return policy?',
     a: 'We offer a 7-day return policy for orders that arrive damaged, defective, or if you receive the wrong item. Please contact us within 7 days of receiving your order with photos of the issue.'
