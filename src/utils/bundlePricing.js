@@ -1,7 +1,5 @@
 // Bundle pricing is derived from the quantity in the cart, so no discounted
 // price needs to be encoded in the cart key itself.
-export const MAX_BUNDLE_QTY = 3;
-
 export const tierDiscount = (qty) => (qty >= 3 ? 0.10 : qty >= 2 ? 0.05 : 0);
 
 export const bundleUnitPrice = (basePrice, qty) =>

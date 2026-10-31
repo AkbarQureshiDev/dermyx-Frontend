@@ -71,7 +71,7 @@ const Cart = () => {
             if (!productData) return null;
 
             return (
-              <div key={index} className='py-4 border-t border-b text-gray-700 grid grid-cols-[4fr_0.5fr_0.5fr] sm:grid-cols-[4fr_2fr_0.5fr] items-center gap-4'>
+              <div key={index} className='py-4 border-t border-b text-gray-700 grid grid-cols-[1fr_auto_auto] sm:grid-cols-[1.2fr_auto_1fr] items-center gap-4'>
                 <div className=' flex items-start gap-6'>
                   <img className='w-16 sm:w-20' src={Array.isArray(productData.image) ? productData.image[0] : (productData.image || assets.cart_icon)} alt={productData.name} />
                   <div>
@@ -101,20 +101,27 @@ const Cart = () => {
                     </div>
                   </div>
                 </div>
-                <input
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    if (e.target.value === '' || val === 0) return;
-                    if (val >= 4) { e.target.value = 3; return; }
-                    updateQuantity(item._id, item.size, val);
-                  }}
-                  className='border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1'
-                  type="number"
-                  min={1}
-                  max={3}
-                  defaultValue={item.quantity}
-                />
-                <img onClick={() => updateQuantity(item._id, item.size, 0)} className='w-4 mr-4 sm:w-5 cursor-pointer' src={assets.bin_icon} alt="" />
+                <div className='flex items-center border border-gray-300 rounded-full overflow-hidden bg-white'>
+                  <button
+                    type='button'
+                    onClick={() => updateQuantity(item._id, item.size, item.quantity - 1)}
+                    disabled={item.quantity <= 1}
+                    aria-label={`Decrease quantity of ${productData.name}`}
+                    className='w-8 h-9 flex items-center justify-center text-lg leading-none text-gray-700 hover:bg-gray-100 disabled:text-gray-300 disabled:hover:bg-transparent disabled:cursor-not-allowed cursor-pointer transition-colors'
+                  >
+                    −
+                  </button>
+                  <span className='w-9 text-center text-sm font-semibold select-none'>{item.quantity}</span>
+                  <button
+                    type='button'
+                    onClick={() => updateQuantity(item._id, item.size, item.quantity + 1)}
+                    aria-label={`Increase quantity of ${productData.name}`}
+                    className='w-8 h-9 flex items-center justify-center text-lg leading-none text-gray-700 hover:bg-gray-100 cursor-pointer transition-colors'
+                  >
+                    +
+                  </button>
+                </div>
+                <img onClick={() => updateQuantity(item._id, item.size, 0)} className='w-4 mr-4 sm:w-5 cursor-pointer sm:justify-self-end' src={assets.bin_icon} alt="" />
               </div>
             )
 
