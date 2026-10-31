@@ -15,7 +15,7 @@ const BestSeller = () => {
     if (bestSeller.length === 0) return null
 
     return (
-        <div className='my-10 lg:my-16'>
+        <div className='my-16 lg:my-24'>
             <div className='text-center text-xl sm:text-3xl py-6 sm:py-8'>
                 <Title text1={'Best'} text2={'Sellers'} />
             </div>
