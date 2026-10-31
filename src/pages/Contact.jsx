@@ -46,7 +46,7 @@ const Contact = () => {
 
                 {/* Left — Info (hidden on mobile screen, shows on md+ desktop screens) */}
                 <div className='hidden md:flex flex-col gap-6 md:w-1/2' style={{ maxWidth: '350px' }}>
-                    <div className='rounded-2xl p-8 flex flex-col gap-6' style={{ backgroundColor: '#B0D1E4' }}>
+                    <div className='rounded-2xl p-8 flex flex-col gap-6' style={{ backgroundColor: '#C1DCF5' }}>
 
                         <div className='flex items-start gap-3'>
                             <FaWhatsapp size={18} className='text-black mt-1 flex-shrink-0' />
@@ -158,8 +158,8 @@ const Contact = () => {
                     <button
                         type='submit'
                         disabled={loading}
-                        className='text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-60'
-                        style={{ backgroundColor: '#B0D1E4' }}
+                        className='text-black font-semibold py-3 rounded-lg transition-colors disabled:opacity-60'
+                        style={{ backgroundColor: '#C1DCF5' }}
                     >
                         {loading ? 'Sending...' : 'Send Message'}
                     </button>

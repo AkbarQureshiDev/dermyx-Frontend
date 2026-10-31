@@ -1,6 +1,5 @@
 import React from 'react'
 import Title from '../components/Title'
-import { assets } from '../assets/assets'
 import NewsletterBox from '../components/NewsletterBox'
 
 const About = () => {
@@ -14,16 +13,13 @@ const About = () => {
       {/* Our Story */}
       <div className='my-12'>
         <h2 className='text-3xl font-bold text-gray-900 mb-6'>OUR STORY</h2>
-        <div className='flex flex-col md:flex-row gap-12'>
-          <img className='w-full md:max-w-[420px] rounded-xl object-cover' src={assets.about_img} alt="Dermyx Story" />
-          <div className='flex flex-col justify-center gap-5 text-gray-600 md:text-base'>
-            <p className='text-lg font-semibold text-gray-800 italic'>We didn't start as a brand. We started as a problem.</p>
-            <p>Dermyx wasn't built in a boardroom. It was built out of frustration, failed products, and a mirror that kept showing the same skin no matter what we tried.</p>
-            <p>This is the story of why we exist — and why we refuse to make products that don't work.</p>
-            <div className='bg-gray-50 border-l-4 border-black px-6 py-4 rounded-r-xl mt-2'>
-              <p className='text-gray-700 italic text-base leading-relaxed'>"I tried everything. Nothing worked. So I decided to build something that actually would."</p>
-              <p className='mt-3 text-sm font-bold text-gray-900 tracking-widest'>— DERMYX FOUNDER</p>
-            </div>
+        <div className='flex flex-col gap-5 text-gray-600 md:text-base max-w-[820px]'>
+          <p className='text-lg font-semibold text-gray-800 italic'>We didn't start as a brand. We started as a problem.</p>
+          <p>Dermyx wasn't built in a boardroom. It was built out of frustration, failed products, and a mirror that kept showing the same skin no matter what we tried.</p>
+          <p>This is the story of why we exist — and why we refuse to make products that don't work.</p>
+          <div className='bg-gray-50 border-l-4 border-black px-6 py-4 rounded-r-xl mt-2'>
+            <p className='text-gray-700 italic text-base leading-relaxed'>"I tried everything. Nothing worked. So I decided to build something that actually would."</p>
+            <p className='mt-3 text-sm font-bold text-gray-900 tracking-widest'>— DERMYX FOUNDER</p>
           </div>
         </div>
       </div>
