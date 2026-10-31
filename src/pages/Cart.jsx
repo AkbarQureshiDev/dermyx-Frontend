@@ -7,7 +7,7 @@ import { bundleUnitPrice, sizeLabel } from '../utils/bundlePricing';
 
 const Cart = () => {
 
-  const { products, currency, cartItems, updateQuantity, navigate, token } = useContext(ShopContext);
+  const { products, currency, cartItems, updateQuantity, navigate } = useContext(ShopContext);
 
   const [cartData, setCartData] = useState([]);
 
@@ -134,12 +134,7 @@ const Cart = () => {
             <button
               onClick={() => {
                 if (soldOutItems.length > 0) return;
-                if (token) {
-                  navigate('/place-order')
-                } else {
-                  sessionStorage.setItem('redirectAfterLogin', '/place-order')
-                  navigate('/login')
-                }
+                navigate('/place-order')
               }}
               disabled={cartData.length === 0 || soldOutItems.length > 0}
               className={`text-white text-sm my-8 px-8 py-3 transition-all duration-200 ${(cartData.length === 0 || soldOutItems.length > 0) ? 'bg-gray-300 cursor-not-allowed opacity-60' : 'bg-black hover:bg-gray-800 cursor-pointer'}`}

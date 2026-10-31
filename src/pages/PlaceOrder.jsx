@@ -19,10 +19,11 @@ const emptyAddress = {
 };
 
 const PlaceOrder = () => {
-    const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products } = useContext(ShopContext);
+    const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, currency } = useContext(ShopContext);
     const [loading, setLoading] = useState(false);
+    const [placedOrder, setPlacedOrder] = useState(null);
 
-    // The address must outlive a sign-in detour from this page.
+    // Keep a typed address across reloads so a shopper doesn't lose it mid-form.
     const [formData, setFormData] = useState(() => {
         try {
             return { ...emptyAddress, ...JSON.parse(sessionStorage.getItem('placeOrderAddress') || '{}') };
@@ -46,13 +47,6 @@ const PlaceOrder = () => {
         if (loading) return;
 
         try {
-            if (!token) {
-                sessionStorage.setItem('redirectAfterLogin', '/place-order');
-                toast.info('Please log in to complete your order.');
-                navigate('/login');
-                return;
-            }
-
             setLoading(true);
 
             let orderItems = [];
@@ -91,14 +85,27 @@ const PlaceOrder = () => {
                 amount: getCartAmount() + delivery_fee
             };
 
-            // Cash on Delivery Order placement
-            const response = await axios.post(backendUrl + '/api/order/place', orderData, { headers: { token } });
+            // Cash on Delivery Order placement (guests allowed — no token)
+            const response = await axios.post(
+                backendUrl + '/api/order/place',
+                orderData,
+                token ? { headers: { token } } : undefined
+            );
             
             if (response.data.success) {
                 sessionStorage.removeItem('placeOrderAddress');
                 setCartItems({});
                 toast.success("Order Placed Successfully!");
-                navigate('/orders');
+                if (token) {
+                    navigate('/orders');
+                } else {
+                    setPlacedOrder({
+                        orderId: response.data.orderId,
+                        email: formData.email,
+                        firstName: formData.firstName,
+                        amount: orderData.amount
+                    });
+                }
             } else {
                 toast.error(response.data.message || "Failed to place order");
             }
@@ -110,6 +117,43 @@ const PlaceOrder = () => {
             setLoading(false);
         }
     };
+
+    if (placedOrder) {
+        return (
+            <div className='min-h-[70vh] flex items-center justify-center py-16'>
+                <div className='w-full max-w-lg bg-white border border-gray-100 rounded-2xl shadow-sm p-8 text-center'>
+                    <div className='mx-auto w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-5'>
+                        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+
+                    <h1 className='text-xl sm:text-2xl font-semibold tracking-tight text-gray-900'>Order Placed Successfully!</h1>
+                    <p className='text-sm text-gray-500 mt-2 leading-relaxed'>
+                        Thank you{placedOrder.firstName ? `, ${placedOrder.firstName}` : ''}. We've received your Cash on Delivery order and our team will call you shortly to confirm it.
+                    </p>
+
+                    {placedOrder.orderId && (
+                        <p className='mt-5 inline-block bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 text-sm font-semibold text-gray-800'>
+                            Order #{String(placedOrder.orderId).slice(-6).toUpperCase()}
+                        </p>
+                    )}
+
+                    <p className='text-xs text-gray-500 mt-4'>
+                        Total payable on delivery: {currency}{placedOrder.amount}
+                        {placedOrder.email ? ` — a confirmation email is on its way to ${placedOrder.email}` : ''}.
+                    </p>
+
+                    <button
+                        onClick={() => navigate('/collection')}
+                        className='mt-8 w-full bg-black hover:bg-gray-800 text-white font-medium py-3.5 rounded-xl text-sm transition-colors cursor-pointer'
+                    >
+                        CONTINUE SHOPPING
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={onSubmitHandler} className='flex flex-col lg:flex-row justify-between gap-10 pt-12 sm:pt-20 min-h-[80vh] pb-16'>
