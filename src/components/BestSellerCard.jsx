@@ -30,11 +30,20 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
           />
         )}
 
-        {soldOut && (
-          <span className="absolute top-2 left-2 bg-[#dc2626] text-white text-[9px] sm:text-[10px] font-bold tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full z-10">
-            OUT OF STOCK
-          </span>
-        )}
+        <div className="absolute top-2 left-2 flex flex-col items-start gap-1.5 z-10">
+          {soldOut ? (
+            <span className="bg-[#dc2626] text-white text-[9px] sm:text-[10px] font-bold tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full">
+              OUT OF STOCK
+            </span>
+          ) : (
+            discountPct > 0 && (
+              <span className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#BFE3FD] text-black text-[10px] sm:text-[11px] font-bold flex flex-col items-center justify-center leading-none shadow-sm">
+                <b>{discountPct}%</b>
+                <span className="mt-0.5 tracking-wider">OFF</span>
+              </span>
+            )
+          )}
+        </div>
       </Link>
 
       {/* Product name */}
@@ -46,17 +55,12 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
 
       {/* Price row */}
       <div className="flex items-baseline gap-1 sm:gap-2 flex-wrap">
+        <span className="text-black text-sm sm:text-[17px] font-bold">
+          {currency} {Number(price).toLocaleString()}
+        </span>
         {originalPrice > 0 && originalPrice > price && (
           <span className="text-[#94a3b8] text-[11px] sm:text-[13px] line-through font-medium">
             {currency}{originalPrice.toLocaleString()}
-          </span>
-        )}
-        <span className="text-[#B0D1E4] text-sm sm:text-[17px] font-bold">
-          {currency} {Number(price).toLocaleString()}
-        </span>
-        {discountPct > 0 && (
-          <span className="bg-[#FDF2F8] text-[#FCB4C5] text-[10px] sm:text-[11px] font-bold px-1.5 sm:px-2 py-0.5 rounded-full">
-            {discountPct}% off
           </span>
         )}
       </div>

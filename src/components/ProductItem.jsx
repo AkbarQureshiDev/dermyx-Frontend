@@ -87,8 +87,9 @@ const ProductItem = ({
               </span>
             ) : (
               discountPct > 0 && (
-                <span className="bg-rose-500 text-white text-[10px] sm:text-[11px] font-extrabold px-2.5 py-0.5 rounded-full shadow-sm">
-                  -{discountPct}%
+                <span className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[#BFE3FD] text-black text-[10px] sm:text-[11px] font-bold flex flex-col items-center justify-center leading-none shadow-sm">
+                  <b>{discountPct}%</b>
+                  <span className="mt-0.5 tracking-wider">OFF</span>
                 </span>
               )
             )}
