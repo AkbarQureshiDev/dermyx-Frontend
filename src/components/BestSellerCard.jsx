@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContextValue'
 import Stars from './Stars'
+import { optimizeImage } from '../utils/seo'
 
 const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating, reviewCount }) => {
   const { currency, addToCart } = useContext(ShopContext)
@@ -24,8 +25,10 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
       >
         {image && image.length > 0 && (
           <img
-            src={image[0]}
-            alt={name}
+            src={optimizeImage(image[0], 500)}
+            alt={`${name} — Dermyx skincare`}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}

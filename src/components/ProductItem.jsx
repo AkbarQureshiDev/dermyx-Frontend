@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContextValue'
+import { optimizeImage } from '../utils/seo'
 
 const ProductItem = ({
   id,
@@ -61,9 +62,11 @@ const ProductItem = ({
           {/* Primary Image */}
           {primaryImg && (
             <img
-              src={primaryImg}
-              alt={name}
+              src={optimizeImage(primaryImg, 600)}
+              alt={`${name} — ${category || 'Dermyx skincare'} product by Dermyx`}
               onLoad={() => setImageLoaded(true)}
+              loading="lazy"
+              decoding="async"
               className={`w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 ${
                 secondaryImg ? 'group-hover:opacity-0' : ''
               } ${soldOut ? 'opacity-60 grayscale-[30%]' : ''}`}
@@ -73,8 +76,10 @@ const ProductItem = ({
           {/* Secondary Hover Image (Catchy flip effect if 2nd image exists) */}
           {secondaryImg && !soldOut && (
             <img
-              src={secondaryImg}
-              alt={`${name} alternative`}
+              src={optimizeImage(secondaryImg, 600)}
+              alt={`${name} — alternate view`}
+              loading="lazy"
+              decoding="async"
               className="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 ease-out"
             />
           )}

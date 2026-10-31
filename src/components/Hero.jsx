@@ -8,8 +8,10 @@ const Hero = () => {
         <source media='(min-width: 640px)' srcSet={heroBanner1} />
         <img
           src={heroBannerMobile}
-          alt='Dermyx Skincare Bundles — Sunbae, Luvanté, Clenzic and Foligrow in a shopping basket'
+          alt='Dermyx Skincare bundles — SUNBAE sunblock, LUVANTE brightening cream, CLENZIC acne face wash and FOLIGROW shampoo'
           loading='eager'
+          fetchpriority='high'
+          decoding='async'
           className='absolute inset-0 w-full h-full object-cover'
         />
       </picture>
