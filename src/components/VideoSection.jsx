@@ -5,22 +5,24 @@ import Video3 from '../assets/VideoSection/Video3.mp4';
 import Video4 from '../assets/VideoSection/video4.mp4';
 import Video5 from '../assets/VideoSection/Video5.mp4';
 import Video6 from '../assets/VideoSection/Video6.mp4';
-import poster1 from '../assets/VideoSection/poster1.jpg';
-import poster2 from '../assets/VideoSection/poster2.jpg';
-import poster3 from '../assets/VideoSection/poster3.jpg';
-import poster4 from '../assets/VideoSection/poster4.jpg';
-import poster5 from '../assets/VideoSection/poster5.jpg';
-import poster6 from '../assets/VideoSection/poster6.jpg';
+import Video7 from '../assets/VideoSection/Video7.mp4';
+import Video8 from '../assets/VideoSection/Video8.mp4';
+import Video9 from '../assets/VideoSection/Video9.mp4';
+import Video10 from '../assets/VideoSection/Video10.mp4';
 
-// 480x854 portrait clips, ~59MB combined — playback is gated on visibility so
-// the page never streams more than the one or two cards actually on screen.
+// Portrait clips — playback is gated on visibility so the page never streams
+// more than the one or two cards actually on screen.
 const videoCards = [
-  { id: 1, videoUrl: Video1, poster: poster1, duration: '1:00' },
-  { id: 2, videoUrl: Video2, poster: poster2, duration: '0:50' },
-  { id: 3, videoUrl: Video3, poster: poster3, duration: '0:23' },
-  { id: 4, videoUrl: Video4, poster: poster4, duration: '1:21' },
-  { id: 5, videoUrl: Video5, poster: poster5, duration: '0:41' },
-  { id: 6, videoUrl: Video6, poster: poster6, duration: '0:50' },
+  { id: 1, videoUrl: Video1 },
+  { id: 2, videoUrl: Video2 },
+  { id: 3, videoUrl: Video3 },
+  { id: 4, videoUrl: Video4 },
+  { id: 5, videoUrl: Video5 },
+  { id: 6, videoUrl: Video6 },
+  { id: 7, videoUrl: Video7 },
+  { id: 8, videoUrl: Video8 },
+  { id: 9, videoUrl: Video9 },
+  { id: 10, videoUrl: Video10 },
 ];
 
 const VideoCard = ({ card, onActivity }) => {
@@ -85,21 +87,15 @@ const VideoCard = ({ card, onActivity }) => {
       <video
         ref={videoRef}
         src={card.videoUrl}
-        poster={card.poster}
         className="h-full w-full object-cover"
         muted
         loop
         playsInline
-        preload="none"
+        preload="metadata"
       />
 
       {/* Bottom scrim keeps the badges readable over bright footage */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/10" />
-
-      {/* Duration badge */}
-      <span className="absolute right-3 top-3 rounded-full bg-black/45 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white backdrop-blur-md">
-        {card.duration}
-      </span>
 
       {/* Sound control — autoplay is muted, so this is how a viewer gets audio */}
       <button
@@ -139,7 +135,8 @@ const VideoSection = () => {
   const scrollContainerRef = useRef(null);
   const [isPaused, setIsPaused] = useState(false);
 
-  // Auto-scroll every 5s by one card, but stand aside while someone is watching.
+  // Auto-scroll every 2s by one card, but stand aside while someone is watching.
+  // Reaching the last card waits one more tick (2s), then glides back to the first.
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container || isPaused) return;
@@ -155,7 +152,7 @@ const VideoSection = () => {
       } else {
         container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
-    }, 5000);
+    }, 2000);
 
     return () => clearInterval(timer);
   }, [isPaused]);
