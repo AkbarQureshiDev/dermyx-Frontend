@@ -12,8 +12,8 @@ import creams from '../assets/TopCategories/creams.jpg';
 // admin assigns a new _id and a stale id would quietly navigate to /product/undefined.
 // `fallback` is always an existing product category, so a card can never dead-end.
 const categories = [
-  { name: 'FACE CLEANSER', match: 'cleanser', fallback: 'Face Care', img: faceCleanser, alt: 'Model holding Dermyx Clenzic purifying face cleanser' },
-  { name: 'SUNBLOCK', match: 'sunblock', fallback: 'Face Care', img: sunblock, alt: 'Model holding Dermyx Sunbae sunblock gel' },
+  { name: 'FACE CLEANSER', match: 'cleanser', fallback: 'Face Beauty', img: faceCleanser, alt: 'Model holding Dermyx Clenzic purifying face cleanser' },
+  { name: 'SUNBLOCK', match: 'sunblock', fallback: 'Face Beauty', img: sunblock, alt: 'Model holding Dermyx Sunbae sunblock gel' },
   { name: 'SHAMPOO', match: 'shampoo', fallback: 'Hair Care', img: shampoo, alt: 'Model holding Dermyx Foligrow anti hair fall shampoo' },
   { name: 'CREAMS', match: 'cream', fallback: 'Skin Care', img: creams, alt: 'Model holding Dermyx Luvanté skin brightening face cream' },
 ];

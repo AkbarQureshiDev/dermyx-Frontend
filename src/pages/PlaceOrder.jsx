@@ -22,6 +22,10 @@ const PlaceOrder = () => {
     const { navigate, backendUrl, token, cartItems, setCartItems, getCartAmount, delivery_fee, products, currency } = useContext(ShopContext);
     const [loading, setLoading] = useState(false);
     const [placedOrder, setPlacedOrder] = useState(null);
+    const [couponInput, setCouponInput] = useState('');
+    const [coupon, setCoupon] = useState(null);
+    const [couponError, setCouponError] = useState('');
+    const [couponLoading, setCouponLoading] = useState(false);
 
     // Keep a typed address across reloads so a shopper doesn't lose it mid-form.
     const [formData, setFormData] = useState(() => {
@@ -40,6 +44,40 @@ const PlaceOrder = () => {
         const name = event.target.name;
         const value = event.target.value;
         setFormData(data => ({ ...data, [name]: value }));
+    };
+
+    const subtotal = getCartAmount();
+    const discount = coupon ? +(subtotal * coupon.percent / 100).toFixed(2) : 0;
+    const orderTotal = +(subtotal + delivery_fee - discount).toFixed(2);
+
+    // The code is checked against the backend; the order keeps the discount it
+    // returns rather than anything typed in this form.
+    const applyCoupon = async () => {
+        const code = couponInput.trim();
+        if (!code || couponLoading) return;
+
+        try {
+            setCouponLoading(true);
+            setCouponError('');
+            const response = await axios.post(backendUrl + '/api/coupon/validate', { code });
+            if (response.data.success) {
+                setCoupon({ code: response.data.code, percent: response.data.percent });
+                setCouponInput('');
+                toast.success(`${response.data.percent}% discount applied`);
+            } else {
+                setCouponError(response.data.message || 'This discount code is not valid.');
+            }
+        } catch (error) {
+            setCouponError(error.response?.data?.message || 'Could not check this code. Try again.');
+        } finally {
+            setCouponLoading(false);
+        }
+    };
+
+    const removeCoupon = () => {
+        setCoupon(null);
+        setCouponInput('');
+        setCouponError('');
     };
 
     const onSubmitHandler = async (event) => {
@@ -82,7 +120,10 @@ const PlaceOrder = () => {
             const orderData = {
                 address: formData,
                 items: orderItems,
-                amount: getCartAmount() + delivery_fee
+                subtotal,
+                deliveryFee: delivery_fee,
+                couponCode: coupon?.code || '',
+                amount: orderTotal
             };
 
             // Cash on Delivery Order placement (guests allowed — no token)
@@ -140,7 +181,7 @@ const PlaceOrder = () => {
                     )}
 
                     <p className='text-xs text-gray-500 mt-4'>
-                        Total payable on delivery: {currency}{placedOrder.amount}
+                        Total payable on delivery: {currency}{Number(placedOrder.amount).toFixed(2)}
                         {placedOrder.email ? ` — a confirmation email is on its way to ${placedOrder.email}` : ''}.
                     </p>
 
@@ -180,8 +221,8 @@ const PlaceOrder = () => {
                 </div>
 
                 <div>
-                    <label className='block text-xs font-semibold text-gray-600 mb-1'>Email Address *</label>
-                    <input required onChange={onChangeHandler} name='email' value={formData.email} className='border border-gray-200 rounded-lg py-2.5 px-4 w-full focus:border-black focus:ring-1 focus:ring-black outline-none transition-all text-sm' type="email" placeholder='ali.khan@gmail.com' />
+                    <label className='block text-xs font-semibold text-gray-600 mb-1'>Email Address</label>
+                    <input onChange={onChangeHandler} name='email' value={formData.email} className='border border-gray-200 rounded-lg py-2.5 px-4 w-full focus:border-black focus:ring-1 focus:ring-black outline-none transition-all text-sm' type="email" placeholder='ali.khan@gmail.com' />
                 </div>
 
                 <div>
@@ -202,8 +243,8 @@ const PlaceOrder = () => {
 
                 <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                     <div>
-                        <label className='block text-xs font-semibold text-gray-600 mb-1'>Zipcode / Postal Code *</label>
-                        <input required onChange={onChangeHandler} name='zipcode' value={formData.zipcode} className='border border-gray-200 rounded-lg py-2.5 px-4 w-full focus:border-black focus:ring-1 focus:ring-black outline-none transition-all text-sm' type="number" placeholder='54000' />
+                        <label className='block text-xs font-semibold text-gray-600 mb-1'>Zipcode / Postal Code</label>
+                        <input onChange={onChangeHandler} name='zipcode' value={formData.zipcode} className='border border-gray-200 rounded-lg py-2.5 px-4 w-full focus:border-black focus:ring-1 focus:ring-black outline-none transition-all text-sm' type="number" placeholder='54000' />
                     </div>
                     <div>
                         <label className='block text-xs font-semibold text-gray-600 mb-1'>Country *</label>
@@ -226,7 +267,53 @@ const PlaceOrder = () => {
                             <Title text1={'ORDER'} text2={'SUMMARY'} />
                         </div>
                     </div>
-                    <CartTotal />
+                    <CartTotal discount={discount} couponCode={coupon?.code}>
+                        <div className='pt-1'>
+                            {coupon ? (
+                                <div className='flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2'>
+                                    <p className='text-xs font-semibold text-emerald-700'>
+                                        {coupon.code} applied — {coupon.percent}% off
+                                    </p>
+                                    <button
+                                        type='button'
+                                        onClick={removeCoupon}
+                                        className='text-xs font-semibold text-emerald-700 underline cursor-pointer bg-transparent border-0'
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                            ) : (
+                                <div>
+                                    <label htmlFor='discountCode' className='block text-xs font-semibold text-gray-600 mb-1'>Discount Code</label>
+                                    <div className='flex gap-2'>
+                                        <input
+                                            id='discountCode'
+                                            type='text'
+                                            value={couponInput}
+                                            onChange={(e) => { setCouponInput(e.target.value); setCouponError(''); }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    applyCoupon();
+                                                }
+                                            }}
+                                            placeholder='Enter discount code'
+                                            className='flex-1 min-w-0 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition-all'
+                                        />
+                                        <button
+                                            type='button'
+                                            onClick={applyCoupon}
+                                            disabled={couponLoading || !couponInput.trim()}
+                                            className='px-4 py-2 rounded-lg bg-black text-white text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+                                        >
+                                            {couponLoading ? '...' : 'APPLY'}
+                                        </button>
+                                    </div>
+                                    {couponError && <p className='text-xs text-red-600 mt-1'>{couponError}</p>}
+                                </div>
+                            )}
+                        </div>
+                    </CartTotal>
                 </div>
 
                 <div className='bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-sm'>

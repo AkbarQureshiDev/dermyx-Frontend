@@ -12,8 +12,8 @@ const COLLECTION_SEO = {
     title: 'All Skincare Products Online in Pakistan',
     description: 'Browse every Dermyx product: acne face wash, dark spot brightening cream, SPF 50 matte sunblock, anti hair fall shampoo and money-saving skincare bundles. Cash on delivery across Pakistan.',
   },
-  'Face Care': {
-    title: 'Face Care Products in Pakistan | Acne Face Wash & SPF 50 Sunblock',
+  'Face Beauty': {
+    title: 'Face Beauty Products in Pakistan | Acne Face Wash & SPF 50 Sunblock',
     description: 'Dermyx face care for Pakistani skin: CLENZIC 3-in-1 acne face wash with AHA + BHA + LHA, and SUNBAE SPF 50 PA+++ matte sunblock with no white cast.',
   },
   'Hair Care': {
@@ -111,7 +111,7 @@ const Collection = () => {
   }, [sortType]);
 
   // Extract all categories dynamically or fallback
-  const availableCategories = ['Face Care', 'Hair Care', 'Skin Care'];
+  const availableCategories = ['Face Beauty', 'Hair Care', 'Skin Care'];
 
   const seoKey = tag === 'bundle' ? 'bundles' : (category.length === 1 && COLLECTION_SEO[category[0]] ? category[0] : 'all');
   const seo = COLLECTION_SEO[seoKey];

@@ -247,8 +247,8 @@ const Navbar = () => {
                     <NavLink to='/collection' className={({ isActive }) => `hover:text-black transition-colors ${isActive ? 'text-black border-b-2 border-black pb-1' : ''}`}>
                         ALL PRODUCTS
                     </NavLink>
-                    <NavLink to='/collection?category=Face Care' className={({ isActive }) => `hover:text-black transition-colors ${isActive ? 'text-black border-b-2 border-black pb-1' : ''}`}>
-                        FACE CARE
+                    <NavLink to='/collection?category=Face Beauty' className={({ isActive }) => `hover:text-black transition-colors ${isActive ? 'text-black border-b-2 border-black pb-1' : ''}`}>
+                        FACE BEAUTY
                     </NavLink>
                     <NavLink to='/collection?category=Hair Care' className={({ isActive }) => `hover:text-black transition-colors ${isActive ? 'text-black border-b-2 border-black pb-1' : ''}`}>
                         HAIR CARE
@@ -278,7 +278,7 @@ const Navbar = () => {
 
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/'>HOME</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/collection'>ALL PRODUCTS</NavLink>
-                    <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/collection?category=Face Care'>FACE CARE</NavLink>
+                    <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/collection?category=Face Beauty'>FACE BEAUTY</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/collection?category=Hair Care'>HAIR CARE</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/collection?category=Skin Care'>SKIN CARE</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border-b border-gray-100 hover:bg-gray-50' to='/collection?tag=bundle'>BUNDLES</NavLink>
