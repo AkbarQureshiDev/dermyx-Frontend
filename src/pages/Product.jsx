@@ -98,15 +98,42 @@ const Product = () => {
 
       <div className='flex gap-12 sm:gap-12 flex-col sm:flex-row'>
 
-        {/* Main image only — auto-cycles every 5s if multiple */}
+        {/* Main image — auto-cycles every 5s, thumbnails pick a frame */}
         <div className='flex-1'>
-          <img
-            className='w-full h-auto transition-opacity duration-500'
-            src={optimizeImage(productData.image[imgIndex], 1000)}
-            alt={`${productData.name} — ${productData.category} by Dermyx`}
-            loading='eager'
-            decoding='async'
-          />
+          <div className='w-full flex items-center justify-center'>
+            <img
+              className='w-full h-auto max-h-[500px] object-contain transition-opacity duration-500'
+              src={optimizeImage(productData.image[imgIndex], 1000)}
+              alt={`${productData.name} — ${productData.category} by Dermyx`}
+              loading='eager'
+              decoding='async'
+            />
+          </div>
+
+          {productData.image.length > 1 && (
+            <div className='mt-3 flex gap-2 sm:gap-3 overflow-x-auto pb-1'>
+              {productData.image.map((url, i) => (
+                <button
+                  key={i}
+                  type='button'
+                  onClick={() => setImgIndex(i)}
+                  aria-label={`Show image ${i + 1} of ${productData.image.length}`}
+                  aria-current={imgIndex === i}
+                  className={`shrink-0 w-24 h-24 sm:w-28 sm:h-28 rounded-md overflow-hidden border-2 transition-colors cursor-pointer ${
+                    imgIndex === i ? 'border-black' : 'border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  <img
+                    src={optimizeImage(url, 200)}
+                    alt={`${productData.name} — image ${i + 1}`}
+                    className='w-full h-full object-cover'
+                    loading='lazy'
+                    decoding='async'
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Product Info */}
