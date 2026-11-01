@@ -4,7 +4,7 @@ import { ShopContext } from '../context/ShopContextValue'
 import RelatedProducts from '../components/RelatedProducts'
 import ProductReviews from '../components/ProductReviews'
 import Seo from '../components/Seo'
-import { MdCheckCircle } from 'react-icons/md'
+import { MdCheckCircle, MdExpandMore } from 'react-icons/md'
 import { getTiers } from '../utils/bundlePricing'
 import { SITE_URL, optimizeImage, pageUrl, stripText } from '../utils/seo'
 
@@ -15,6 +15,7 @@ const Product = () => {
   const [productData, setProductData] = useState(false)
   const [imgIndex, setImgIndex] = useState(0)
   const [selectedTier, setSelectedTier] = useState(1)
+  const [showIngredients, setShowIngredients] = useState(false)
 
   // Auto-cycle images every 5 seconds
   useEffect(() => {
@@ -38,6 +39,8 @@ const Product = () => {
   const outOfStock = productData.inStock === false
   const productUrl = pageUrl(`/product/${productId}`)
   const cleanDescription = stripText(productData.description)
+  const ingredientsText = typeof productData.ingredients === 'string' ? productData.ingredients.trim() : ''
+  const ingredientLines = ingredientsText ? ingredientsText.split(/[\n,]+/).map((line) => line.trim()).filter(Boolean) : []
   const seoDescription = cleanDescription.slice(0, 158)
   const categoryPath = `/collection?category=${encodeURIComponent(productData.category)}`
 
@@ -170,6 +173,34 @@ const Product = () => {
           )}
 
           <p className='mt-5 text-gray-500 md:w-4/5'>{productData.description}</p>
+
+          {/* ── Ingredients (FAQ) ── */}
+          {ingredientLines.length > 0 && (
+            <div className='mt-6 md:w-4/5 border border-gray-200 rounded-xl overflow-hidden'>
+              <button
+                type='button'
+                onClick={() => setShowIngredients((open) => !open)}
+                aria-expanded={showIngredients}
+                aria-controls='product-ingredients'
+                className='w-full flex items-center justify-between gap-4 px-4 py-3 text-left cursor-pointer hover:bg-gray-50 transition-colors'
+              >
+                <span className='text-sm font-semibold text-gray-800'>Ingredients</span>
+                <MdExpandMore
+                  className={`text-xl text-gray-500 transition-transform duration-300 ${showIngredients ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {showIngredients && (
+                <div
+                  id='product-ingredients'
+                  className='px-4 pb-4 flex flex-col gap-1 text-sm text-gray-600 leading-relaxed'
+                >
+                  {ingredientLines.map((line, i) => (
+                    <span key={i} className='block'>{line}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* ── Buy More Save More ── */}
           {(() => {

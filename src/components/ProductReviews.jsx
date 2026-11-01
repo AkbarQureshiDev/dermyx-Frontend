@@ -51,6 +51,11 @@ const ProductReviews = ({ productId }) => {
       toast.error('Please choose a star rating.')
       return
     }
+    // Guests don't have an account name to fall back on.
+    if (!token && !name.trim()) {
+      toast.error('Please add the name to show on your review.')
+      return
+    }
     setSubmitting(true)
     try {
       const response = await axios.post(
@@ -131,22 +136,9 @@ const ProductReviews = ({ productId }) => {
         </div>
       </div>
 
-      {/* Write a review */}
+      {/* Write a review — guests can post one too, no account needed */}
       <div className='mt-6'>
-        {!token ? (
-          <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-3 border border-dashed rounded-xl p-4 bg-white'>
-            <p className='text-sm text-gray-600'>Sign in to rate this product and share your experience.</p>
-            <button
-              onClick={() => {
-                sessionStorage.setItem('redirectAfterLogin', `/product/${productId}`)
-                navigate('/login')
-              }}
-              className='border-2 border-black text-black px-5 py-2 text-sm font-medium hover:bg-gray-50 transition-colors'
-            >
-              WRITE A REVIEW
-            </button>
-          </div>
-        ) : openForm ? (
+        {openForm ? (
           <form onSubmit={submitReview} className='border rounded-xl p-5 bg-white flex flex-col gap-4'>
             <div className='flex items-center gap-3'>
               <span className='text-sm font-medium text-gray-700'>Your rating</span>
@@ -175,6 +167,7 @@ const ProductReviews = ({ productId }) => {
               value={name}
               type="text"
               maxLength={60}
+              required={!token}
               className='border border-gray-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-black'
               placeholder='Your name (shown publicly)'
             />
