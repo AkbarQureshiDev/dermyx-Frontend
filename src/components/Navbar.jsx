@@ -149,16 +149,16 @@ const Navbar = () => {
                 <div className='bg-[#BFE3FD] text-black py-4 px-4 text-xs sm:text-sm font-semibold tracking-wider uppercase overflow-hidden'>
                 <div className='flex w-max animate-marquee-banner whitespace-nowrap'>
                     {[
-                        '✦ Dermatologist Tested',
-                        '✦ Limited Time Only — Shop Now',
-                        '✦ Free Shipping On 3+ Orders',
-                        '✦ 100% Cruelty Free & Sulphate Free',
-                        '✦ Trusted By 100K+ Customers',
-                        '✦ Dermatologist Tested',
-                        '✦ Limited Time Only — Shop Now',
-                        '✦ Free Shipping On 3+ Orders',
-                        '✦ 100% Cruelty Free & Sulphate Free',
-                        '✦ Trusted By 100K+ Customers',
+                        '✦ Free Shipping On Orders Over Rs 3000',
+                        '✦ Limited Time Offer',
+                        '✦ Free Shipping On Orders Over Rs 3000',
+                        '✦ Limited Time Offer',
+                        '✦ Free Shipping On Orders Over Rs 3000',
+                        '✦ Limited Time Offer',
+                        '✦ Free Shipping On Orders Over Rs 3000',
+                        '✦ Limited Time Offer',
+                        '✦ Free Shipping On Orders Over Rs 3000',
+                        '✦ Limited Time Offer',
                     ].map((text, i) => (
                         <span key={i} className='mx-8'>{text}</span>
                     ))}

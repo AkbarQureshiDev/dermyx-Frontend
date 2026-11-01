@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
 import { ShopContext } from '../context/ShopContextValue'
 import Title from './Title';
+import { shippingFeeFor } from '../utils/shipping';
 
 const CartTotal = ({ discount = 0, couponCode = '', children = null }) => {
 
     const {currency,delivery_fee,getCartAmount} = useContext(ShopContext);
     const subtotal = getCartAmount();
-    const total = subtotal === 0 ? 0 : +(subtotal + delivery_fee - discount).toFixed(2);
+    const shipping = shippingFeeFor(subtotal, delivery_fee);
+    const total = subtotal === 0 ? 0 : +(subtotal + shipping - discount).toFixed(2);
 
   return (
     <div className='w-full'>
@@ -24,7 +26,9 @@ const CartTotal = ({ discount = 0, couponCode = '', children = null }) => {
                 <>
                     <div className='flex justify-between'>
                         <p>Shipping Fee</p>
-                        <p>{currency} {delivery_fee.toFixed(2)}</p>
+                        <p className={shipping === 0 ? 'font-semibold text-emerald-700' : ''}>
+                            {shipping === 0 ? 'FREE' : `${currency} ${shipping.toFixed(2)}`}
+                        </p>
                     </div>
                     <hr />
                 </>

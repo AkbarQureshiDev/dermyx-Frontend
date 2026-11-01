@@ -5,6 +5,7 @@ import { ShopContext } from '../context/ShopContextValue'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { bundleUnitPrice } from '../utils/bundlePricing'
+import { shippingFeeFor } from '../utils/shipping'
 
 const emptyAddress = {
     firstName: '',
@@ -47,8 +48,9 @@ const PlaceOrder = () => {
     };
 
     const subtotal = getCartAmount();
+    const shipping = shippingFeeFor(subtotal, delivery_fee);
     const discount = coupon ? +(subtotal * coupon.percent / 100).toFixed(2) : 0;
-    const orderTotal = +(subtotal + delivery_fee - discount).toFixed(2);
+    const orderTotal = +(subtotal + shipping - discount).toFixed(2);
 
     // The code is checked against the backend; the order keeps the discount it
     // returns rather than anything typed in this form.
@@ -121,7 +123,7 @@ const PlaceOrder = () => {
                 address: formData,
                 items: orderItems,
                 subtotal,
-                deliveryFee: delivery_fee,
+                deliveryFee: shipping,
                 couponCode: coupon?.code || '',
                 amount: orderTotal
             };
