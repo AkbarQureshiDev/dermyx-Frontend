@@ -18,7 +18,6 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Verify from './pages/Verify'
 import Seo from './components/Seo'
 
 const STATIC_SEO = {
@@ -50,7 +49,6 @@ const STATIC_SEO = {
   '/login': { title: 'Sign In', description: 'Sign in to your Dermyx account to track orders and check out faster.', noindex: true },
   '/place-order': { title: 'Checkout', description: 'Complete your Dermyx order with delivery details and cash on delivery or online payment.', noindex: true },
   '/orders': { title: 'My Orders', description: 'Track your Dermyx skincare orders, delivery status and history.', noindex: true },
-  '/verify': { title: 'Order Verification', description: 'Confirm your Dermyx payment to complete your order.', noindex: true },
 }
 
 const App = () => {
@@ -84,7 +82,6 @@ const App = () => {
         <Route path='/login' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><Login /></div>} />
         <Route path='/place-order' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><PlaceOrder /></div>} />
         <Route path='/orders' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><Orders /></div>} />
-        <Route path='/verify' element={<div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'><Verify /></div>} />
       </Routes>
 
       {/* Footer with standard padding */}
