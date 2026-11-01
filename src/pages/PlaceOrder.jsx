@@ -86,6 +86,13 @@ const PlaceOrder = () => {
         event.preventDefault();
         if (loading) return;
 
+        // 11 digits is the only valid Pakistani mobile length; dashes and spaces
+        // in what the shopper typed are ignored.
+        if (formData.phone.replace(/\D/g, '').length !== 11) {
+            toast.error('Check your number');
+            return;
+        }
+
         try {
             setLoading(true);
 
