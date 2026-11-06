@@ -50,15 +50,10 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
             </span>
           ) : (
             discountPct > 0 && (
-              <>
-                <span className="sm:hidden inline-flex items-center bg-black text-[#BFE3FD] text-[9px] font-bold tracking-wide px-2 py-[3px] rounded-full leading-none shadow-sm">
-                  {discountPct}% OFF
-                </span>
-                <span className="hidden sm:flex w-11 h-11 rounded-full bg-black text-[#BFE3FD] text-[10px] sm:text-[11px] font-bold flex-col items-center justify-center leading-none shadow-sm">
-                  <b>{discountPct}%</b>
-                  <span className="mt-0.5 tracking-wider">OFF</span>
-                </span>
-              </>
+              <span className="hidden sm:flex w-11 h-11 rounded-full bg-black text-[#BFE3FD] text-[10px] sm:text-[11px] font-bold flex-col items-center justify-center leading-none shadow-sm">
+                <b>{discountPct}%</b>
+                <span className="mt-0.5 tracking-wider">OFF</span>
+              </span>
             )
           )}
         </div>
@@ -82,6 +77,12 @@ const BestSellerCard = ({ id, image, name, price, originalPrice, inStock, rating
           </span>
         )}
       </div>
+
+      {discountPct > 0 && !soldOut && (
+        <span className="sm:hidden flex w-fit items-center bg-[#BFE3FD] text-[#1e293b] text-[9px] font-bold tracking-wide px-2 py-[3px] rounded-full leading-none">
+          {discountPct}% OFF
+        </span>
+      )}
 
       {/* Rating */}
       {Number(reviewCount) > 0 && (
