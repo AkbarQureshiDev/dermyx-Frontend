@@ -11,7 +11,7 @@ import { SITE_URL, optimizeImage, pageUrl, stripText } from '../utils/seo'
 const Product = () => {
 
   const { productId } = useParams()
-  const { products, currency, setBundleQuantity, navigate, token } = useContext(ShopContext)
+  const { products, currency, setBundleQuantity, navigate } = useContext(ShopContext)
   const [productData, setProductData] = useState(false)
   const [imgIndex, setImgIndex] = useState(0)
   const [selectedTier, setSelectedTier] = useState(1)
@@ -292,12 +292,7 @@ const Product = () => {
             const handleBuyNow = () => {
               if (outOfStock) return;
               setBundleQuantity(productData._id, selectedTier);
-              if (token) {
-                navigate('/place-order');
-              } else {
-                sessionStorage.setItem('redirectAfterLogin', '/place-order');
-                navigate('/login');
-              }
+              navigate('/place-order');
             };
             if (outOfStock) {
               return (
