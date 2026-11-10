@@ -3,6 +3,13 @@ import { assets } from '../assets/assets'
 import { Link, NavLink } from 'react-router-dom'
 import { ShopContext } from '../context/ShopContextValue'
 
+const announcements = [
+    { text: '✦ 11:11 Sale Is Live Now — 20% Off · Shop Now', to: '/collection' },
+    { text: '✦ Free Shipping On Orders Over Rs 3000' },
+    { text: '✦ Limited Time Offer' },
+    { text: '✦ Free Shipping On Orders Over Rs 3000' },
+]
+
 const Navbar = () => {
     const [visible, setVisible] = useState(false);
     const [searchInput, setSearchInput] = useState('');
@@ -148,19 +155,12 @@ const Navbar = () => {
             <div className={`overflow-hidden transition-all duration-300 ease-out ${collapsed ? 'max-h-0 opacity-0' : 'max-h-23 opacity-100'}`}>
                 <div className='bg-[#BFE3FD] text-black py-4 px-4 text-xs sm:text-sm font-semibold tracking-wider uppercase overflow-hidden'>
                 <div className='flex w-max animate-marquee-banner whitespace-nowrap'>
-                    {[
-                        '✦ Free Shipping On Orders Over Rs 3000',
-                        '✦ Limited Time Offer',
-                        '✦ Free Shipping On Orders Over Rs 3000',
-                        '✦ Limited Time Offer',
-                        '✦ Free Shipping On Orders Over Rs 3000',
-                        '✦ Limited Time Offer',
-                        '✦ Free Shipping On Orders Over Rs 3000',
-                        '✦ Limited Time Offer',
-                        '✦ Free Shipping On Orders Over Rs 3000',
-                        '✦ Limited Time Offer',
-                    ].map((text, i) => (
-                        <span key={i} className='mx-8'>{text}</span>
+                    {[...announcements, ...announcements].map((item, i) => (
+                        item.to ? (
+                            <Link key={i} to={item.to} className='mx-8 hover:underline underline-offset-4'>{item.text}</Link>
+                        ) : (
+                            <span key={i} className='mx-8'>{item.text}</span>
+                        )
                     ))}
                 </div>
                 <style>{`
