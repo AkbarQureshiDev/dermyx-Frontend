@@ -5,7 +5,7 @@ import { ShopContext } from '../context/ShopContextValue'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { bundleUnitPrice } from '../utils/bundlePricing'
-import { shippingFeeFor } from '../utils/shipping'
+import { shippingFeeFor, FREE_SHIPPING_THRESHOLD } from '../utils/shipping'
 
 const emptyAddress = {
     firstName: '',
@@ -51,6 +51,8 @@ const PlaceOrder = () => {
     const shipping = shippingFeeFor(subtotal, delivery_fee);
     const discount = coupon ? +(subtotal * coupon.percent / 100).toFixed(2) : 0;
     const orderTotal = +(subtotal + shipping - discount).toFixed(2);
+    // Codes are not offered once the cart passes the free-shipping threshold.
+    const couponAvailable = subtotal <= FREE_SHIPPING_THRESHOLD;
 
     // The code is checked against the backend; the order keeps the discount it
     // returns rather than anything typed in this form.
@@ -81,6 +83,15 @@ const PlaceOrder = () => {
         setCouponInput('');
         setCouponError('');
     };
+
+    // A code applied below the threshold must not survive into a cart that is
+    // now above it, or the hidden discount would still reduce the total.
+    useEffect(() => {
+        if (subtotal <= FREE_SHIPPING_THRESHOLD) return;
+        setCoupon(null);
+        setCouponInput('');
+        setCouponError('');
+    }, [subtotal]);
 
     const onSubmitHandler = async (event) => {
         event.preventDefault();
@@ -277,51 +288,53 @@ const PlaceOrder = () => {
                         </div>
                     </div>
                     <CartTotal discount={discount} couponCode={coupon?.code}>
-                        <div className='pt-1'>
-                            {coupon ? (
-                                <div className='flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2'>
-                                    <p className='text-xs font-semibold text-emerald-700'>
-                                        {coupon.code} applied — {coupon.percent}% off
-                                    </p>
-                                    <button
-                                        type='button'
-                                        onClick={removeCoupon}
-                                        className='text-xs font-semibold text-emerald-700 underline cursor-pointer bg-transparent border-0'
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                            ) : (
-                                <div>
-                                    <label htmlFor='discountCode' className='block text-xs font-semibold text-gray-600 mb-1'>Discount Code</label>
-                                    <div className='flex gap-2'>
-                                        <input
-                                            id='discountCode'
-                                            type='text'
-                                            value={couponInput}
-                                            onChange={(e) => { setCouponInput(e.target.value); setCouponError(''); }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter') {
-                                                    e.preventDefault();
-                                                    applyCoupon();
-                                                }
-                                            }}
-                                            placeholder='Enter discount code'
-                                            className='flex-1 min-w-0 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition-all'
-                                        />
+                        {couponAvailable && (
+                            <div className='pt-1'>
+                                {coupon ? (
+                                    <div className='flex items-center justify-between gap-3 bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-2'>
+                                        <p className='text-xs font-semibold text-emerald-700'>
+                                            {coupon.code} applied — {coupon.percent}% off
+                                        </p>
                                         <button
                                             type='button'
-                                            onClick={applyCoupon}
-                                            disabled={couponLoading || !couponInput.trim()}
-                                            className='px-4 py-2 rounded-lg bg-black text-white text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+                                            onClick={removeCoupon}
+                                            className='text-xs font-semibold text-emerald-700 underline cursor-pointer bg-transparent border-0'
                                         >
-                                            {couponLoading ? '...' : 'APPLY'}
+                                            Remove
                                         </button>
                                     </div>
-                                    {couponError && <p className='text-xs text-red-600 mt-1'>{couponError}</p>}
-                                </div>
-                            )}
-                        </div>
+                                ) : (
+                                    <div>
+                                        <label htmlFor='discountCode' className='block text-xs font-semibold text-gray-600 mb-1'>Discount Code</label>
+                                        <div className='flex gap-2'>
+                                            <input
+                                                id='discountCode'
+                                                type='text'
+                                                value={couponInput}
+                                                onChange={(e) => { setCouponInput(e.target.value); setCouponError(''); }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        e.preventDefault();
+                                                        applyCoupon();
+                                                    }
+                                                }}
+                                                placeholder='Enter discount code'
+                                                className='flex-1 min-w-0 border border-gray-200 rounded-lg py-2 px-3 text-sm focus:border-black focus:ring-1 focus:ring-black outline-none transition-all'
+                                            />
+                                            <button
+                                                type='button'
+                                                onClick={applyCoupon}
+                                                disabled={couponLoading || !couponInput.trim()}
+                                                className='px-4 py-2 rounded-lg bg-black text-white text-xs font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+                                            >
+                                                {couponLoading ? '...' : 'APPLY'}
+                                            </button>
+                                        </div>
+                                        {couponError && <p className='text-xs text-red-600 mt-1'>{couponError}</p>}
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </CartTotal>
                 </div>
 
