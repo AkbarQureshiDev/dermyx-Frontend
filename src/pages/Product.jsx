@@ -334,7 +334,7 @@ const Product = () => {
 
       {/* Reviews */}
       <div className='mt-16 max-w-[1200px]'>
-        <ProductReviews productId={productId} />
+        <ProductReviews productId={productId} productImage={productData?.image?.[0]} productName={productData?.name} />
       </div>
 
       <RelatedProducts category={productData.category} />
